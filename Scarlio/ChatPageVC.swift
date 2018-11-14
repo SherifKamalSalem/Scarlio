@@ -20,6 +20,7 @@ class ChatPageVC: JSQMessagesViewController {
     var chatRoomId: String!
     var memberIds: [String]!
     var membersToPush: [String]!
+    var titleName: String!
     
     
     var outgoingBubble = JSQMessagesBubbleImageFactory()?.outgoingMessagesBubbleImage(with: UIColor.jsq_messageBubbleBlue())
@@ -123,6 +124,8 @@ class ChatPageVC: JSQMessagesViewController {
         if let text = text {
             outgoingMessage = OutGoingMessages(message: text, senderId: currentUser!.objectId, senderName: currentUser!.firstname, date: date, status: kDELIVERED, type: kTEXT)
         }
+        JSQSystemSoundPlayer.jsq_playMessageSentSound()
+        self.finishSendingMessage()
         outgoingMessage!.sendMessage(chatRoomID: chatRoomId, messages: outgoingMessage!.messagesDictionary, memberIds: memberIds, membersToPush: membersToPush)
     }
     

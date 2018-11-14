@@ -171,6 +171,11 @@ extension ChatsVC : UITableViewDelegate, UITableViewDataSource {
         
         let chatPageVC = ChatPageVC()
         chatPageVC.hidesBottomBarWhenPushed = true
+        chatPageVC.titleName = recent[kWITHUSERUSERNAME] as? String
+        chatPageVC.memberIds = recent[kMEMBERS] as? [String]
+        chatPageVC.membersToPush = recent[kMEMBERSTOPUSH] as? [String]
+        chatPageVC.chatRoomId = recent[kCHATROOMID] as? String
+        
         navigationController?.pushViewController(chatPageVC, animated: true)
     }
 }
