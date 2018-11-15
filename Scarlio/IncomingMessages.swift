@@ -24,8 +24,10 @@ class IncomingMessages {
         switch type {
         case kTEXT:
             message = createTextMessage(messages: messages, chatRoomId: chatRoomId)
-        case kAUDIO: print("Unkown msg type")
-        case kPICTURE: print("Unkown msg type")
+        case kAUDIO:
+            print("Unkown msg type")
+        case kPICTURE:
+            message = createPictureMessage(messages: messages)
         case kVIDEO: print("Unkown msg type")
         case kLOCATION: print("Unkown msg type")
         default:
@@ -54,5 +56,37 @@ class IncomingMessages {
             date = Date()
         }
         return JSQMessage(senderId: userId, senderDisplayName: name, date: date, text: messages[kMESSAGE] as? String)
+    }
+    
+    //MARK: creating picture msg
+    func createPictureMessage(messages: NSDictionary) -> JSQMessage? {
+        let name = messages[kSENDERNAME] as? String
+        let userId = messages[kSENDERID] as? String
+        var date: Date!
+        if let createdAt = messages[kDATE] {
+            if (createdAt as! String).count != 14 {
+                date = Date()
+            } else {
+                date = dateFormatter().date(from: createdAt as! String)
+            }
+        } else {
+            date = Date()
+        }
+        //Customize image according to portrait or landscape mode
+        let mediaItem = PhotoMediaItem(image: nil)
+        mediaItem?.appliesMediaViewMaskAsOutgoing = outGoingStatusFor(senderId: userId!)
+        
+        downloadImage(imageUrl: messages[kPICTURE] as! String) { (image) in
+            if image != nil {
+                mediaItem?.image = image
+                self.collectionView.reloadData()
+            }
+        }
+        return JSQMessage(senderId: userId, senderDisplayName: name, date: date, media: mediaItem)
+    }
+    
+    //MARK: check if incoming or outgoing msg
+    func outGoingStatusFor(senderId: String) -> Bool {
+        return senderId == FUser.currentId()
     }
 }
