@@ -22,6 +22,9 @@ class ChatPageVC: JSQMessagesViewController {
     var memberIds: [String]!
     var membersToPush: [String]!
     var titleName: String!
+    var isGroup: Bool?
+    var group: NSDictionary?
+    var withUsers: [FUser] = []
     
     let legitTypes = [kAUDIO, kVIDEO, kTEXT, kLOCATION, kPICTURE]
     var messages: [JSQMessage] = []
@@ -34,9 +37,38 @@ class ChatPageVC: JSQMessagesViewController {
     var minMessagesNumber = 0
     var loadOld = false
     var loadedMessagesCount = 0
+    //listener for new messages, notify user for read msg status and typing
+    var typingListener: ListenerRegistration?
+    var updatedChatListener: ListenerRegistration?
+    var newChatListener: ListenerRegistration?
     
     var outgoingBubble = JSQMessagesBubbleImageFactory()?.outgoingMessagesBubbleImage(with: UIColor.jsq_messageBubbleBlue())
     var incomingBubble = JSQMessagesBubbleImageFactory()?.outgoingMessagesBubbleImage(with: UIColor.jsq_messageBubbleLightGray())
+    
+    //Custom headers
+    let leftBarButtonView: UIView = {
+        let view = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: 44))
+        return view
+    }()
+    
+    let avatarButton: UIButton = {
+        let button = UIButton(frame: CGRect(x: 0, y: 10, width: 25, height: 25))
+        return button
+    }()
+    
+    let titleLabel: UILabel = {
+        let title = UILabel(frame: CGRect(x: 30, y: 10, width: 140, height: 15))
+        title.textAlignment = .left
+        title.font = UIFont(name: title.font.fontName, size: 14)
+        return title
+    }()
+    
+    let subtitleLabel: UILabel = {
+        let subtitle = UILabel(frame: CGRect(x: 30, y: 25, width: 140, height: 15))
+        subtitle.textAlignment = .left
+        subtitle.font = UIFont(name: subtitle.font.fontName, size: 10)
+        return subtitle
+    }()
     
     //Fix UI issue for iphone x
     override func viewDidLayoutSubviews() {
@@ -51,6 +83,8 @@ class ChatPageVC: JSQMessagesViewController {
         
         collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize.zero
         collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize.zero
+        setCustomTitle()
+        
         loadMessages()
         self.senderId = FUser.currentId()
         self.senderDisplayName = FUser.currentUser()?.firstname
@@ -143,13 +177,14 @@ class ChatPageVC: JSQMessagesViewController {
     
     //MARK: JSQMessages delegate functions
     override func didPressAccessoryButton(_ sender: UIButton!) {
+        let camera = Camera(delegate_: self)
         let optionMenu = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let takePhotoOrVideo = UIAlertAction(title: "Camera", style: .default) { (action) in
             
         }
         
         let sharePhoto = UIAlertAction(title: "Photo Library", style: .default) { (action) in
-            
+            camera.presentPhotoLibrary(target: self, canEdit: false)
         }
         
         let shareVideo = UIAlertAction(title: "Video Library", style: .default) { (action) in
@@ -198,6 +233,12 @@ class ChatPageVC: JSQMessagesViewController {
         }
     }
     
+    override func collectionView(_ collectionView: JSQMessagesCollectionView!, header headerView: JSQMessagesLoadEarlierHeaderView!, didTapLoadEarlierMessagesButton sender: UIButton!) {
+        //load more old messages
+        self.loadMoreMessages(maxNumber: maxMessagesNumber, minNumber: minMessagesNumber)
+        self.collectionView.reloadData()
+    }
+    
     override func textViewDidChange(_ textView: UITextView) {
         if textView.text != "" {
             updateSendButton(isSend: true)
@@ -210,10 +251,24 @@ class ChatPageVC: JSQMessagesViewController {
     func sendMessage(text: String?, date: Date, picture: UIImage?, location: String?, video: NSURL?, audio: String?) {
         var outgoingMessage: OutGoingMessages?
         let currentUser = FUser.currentUser()
-        //text message
+        //text msgs
         if let text = text {
             outgoingMessage = OutGoingMessages(message: text, senderId: currentUser!.objectId, senderName: currentUser!.firstname, date: date, status: kDELIVERED, type: kTEXT)
         }
+        //Picture msgs
+        if let pic = picture {
+            uploadImage(image: pic, chatRoomId: chatRoomId, view: self.navigationController!.view) { (imageLink) in
+                if imageLink != nil {
+                    let text = kPICTURE
+                    outgoingMessage = OutGoingMessages(message: text, pictureLink: imageLink!, senderId: currentUser!.objectId, senderName: currentUser!.firstname, date: date, status: kDELIVERED, type: kPICTURE)
+                    JSQSystemSoundPlayer.jsq_playMessageSentSound()
+                    self.finishSendingMessage()
+                    outgoingMessage?.sendMessage(chatRoomID: self.chatRoomId, messages: outgoingMessage!.messagesDictionary, memberIds: self.memberIds, membersToPush: self.membersToPush)
+                }
+            }
+            return
+        }
+        //make a sound 🗣🖕💨 to notify user of new coming msgs
         JSQSystemSoundPlayer.jsq_playMessageSentSound()
         self.finishSendingMessage()
         outgoingMessage!.sendMessage(chatRoomID: chatRoomId, messages: outgoingMessage!.messagesDictionary, memberIds: memberIds, membersToPush: membersToPush)
@@ -235,8 +290,36 @@ class ChatPageVC: JSQMessagesViewController {
             self.insertMessages()
             self.finishReceivingMessage(animated: true)
             self.initialLoadComplete = true
+            self.getOldMessagesInBackground()
+            self.listenForNewChats()
             print("we have \(self.messages.count) messages loaded")
         }
+    }
+    
+    //MARK: load more old messages
+    func loadMoreMessages(maxNumber: Int, minNumber: Int) {
+        if loadOld {
+            maxMessagesNumber = minNumber - 1
+            minMessagesNumber = maxMessagesNumber - kNUMBEROFMESSAGES
+        }
+        if minMessagesNumber < 0 {
+            minMessagesNumber = 0
+        }
+        for num in (minMessagesNumber ... maxMessagesNumber).reversed() {
+            let messageDictionary = loadedMessages[num]
+            insertNewMessage(messageDictionary: messageDictionary)
+            loadedMessagesCount += 1
+        }
+        loadOld = true
+        self.showLoadEarlierMessagesHeader = (loadedMessagesCount != loadedMessages.count)
+    }
+    
+    //MARK: inserting old loaded messages that requested after loading the first 11 msgs
+    func insertNewMessage(messageDictionary: NSDictionary) {
+        let incomingMessage = IncomingMessages(collectionView_: self.collectionView!)
+        let message = incomingMessage.createMessage(messages: messageDictionary, chatRoomId: chatRoomId)
+        objectMessages.insert(messageDictionary, at: 0)
+        messages.insert(message!, at: 0)
     }
     
     //MARK: Insert messages
@@ -254,7 +337,7 @@ class ChatPageVC: JSQMessagesViewController {
         self.showLoadEarlierMessagesHeader = (loadedMessagesCount != loadedMessages.count)
     }
     
-    //check if the message is on the right side or in the left side
+    //MARK: check if the message is on the right side or in the left side
     func insertInitialLoadMessages(messageDictionary: NSDictionary) -> Bool {
         let incomingMessage = IncomingMessages(collectionView_: self.collectionView!)
         //incoming msgs
@@ -270,12 +353,94 @@ class ChatPageVC: JSQMessagesViewController {
         return isIncoming(messageDictionary: messageDictionary)
     }
     
+    //MARK: Update UI and Custom top header
+    func setCustomTitle() {
+        leftBarButtonView.addSubview(avatarButton)
+        leftBarButtonView.addSubview(titleLabel)
+        leftBarButtonView.addSubview(subtitleLabel)
+        let infoBtn = UIBarButtonItem(image: UIImage(named: "info"), style: .plain, target: self, action: #selector(self.infoBtnPressed))
+        self.navigationItem.rightBarButtonItem = infoBtn
+        let leftBarButtonItem = UIBarButtonItem(customView: leftBarButtonView)
+        self.navigationItem.leftBarButtonItems?.append(leftBarButtonItem)
+        if isGroup! {
+            avatarButton.addTarget(self, action: #selector(self.showGroup), for: .touchUpInside)
+        } else {
+            avatarButton.addTarget(self, action: #selector(self.showUserProfile), for: .touchUpInside)
+        }
+        
+        getUsersFromFirestore(withIds: memberIds) { (withUsers) in
+            self.withUsers = withUsers
+            if !self.isGroup! {
+                self.setUIForSingleChat()
+            }
+        }
+    }
+    //MARK: set UI for single chat
+    func setUIForSingleChat() {
+        let withUser = withUsers.first!
+        imageFromData(pictureData: withUser.avatar) { (image) in
+            if image != nil {
+                self.avatarButton.setImage(image?.circleMasked, for: .normal)
+            }
+        }
+        titleLabel.text = withUser.fullname
+        if withUser.isOnline {
+            subtitleLabel.text = "Online"
+        } else {
+            subtitleLabel.text = "Offline"
+        }
+        avatarButton.addTarget(self, action: #selector(self.showUserProfile), for: .touchUpInside)
+    }
+    
     //MARK: check if incoming or outgoing
     func isIncoming(messageDictionary: NSDictionary) -> Bool {
         if FUser.currentId() == messageDictionary[kSENDERID] as! String {
             return false
         } else {
             return true
+        }
+    }
+    
+    //MARK: listen for more than 11 chat msgs
+    func listenForNewChats() {
+        var lastMessageDate = "0"
+        if loadedMessages.count > 0 {
+            lastMessageDate = loadedMessages.last![kDATE] as! String
+        }
+        newChatListener = reference(.Message).document(FUser.currentId()).collection(chatRoomId).whereField(kDATE, isGreaterThan: lastMessageDate).addSnapshotListener({ (snapshot, error) in
+            guard let snapshot = snapshot else { return }
+            if !snapshot.isEmpty {
+                for diff in snapshot.documentChanges {
+                    if diff.type == .added {
+                        let item = diff.document.data() as NSDictionary
+                        if let type = item[kTYPE] {
+                            if self.legitTypes.contains(type as! String) {
+                                if type as! String == kPICTURE {
+                                    
+                                }
+                                if self.insertInitialLoadMessages(messageDictionary: item) {
+                                    JSQSystemSoundPlayer.jsq_playMessageReceivedSound()
+                                }
+                                self.finishReceivingMessage()
+                            }
+                        }
+                    }
+                }
+            }
+        })
+    }
+    
+    //MARK: loading old msgs in background
+    func getOldMessagesInBackground() {
+        if loadedMessages.count > 10 {
+            let firstMessageDate = loadedMessages.last![kDATE] as! String
+            reference(.Message).document(FUser.currentId()).collection(chatRoomId).whereField(kDATE, isLessThan: firstMessageDate).getDocuments { (snapshot, error) in
+                guard let snapshot = snapshot else { return }
+                let sorted = ((dictionaryFromSnapshots(snapshots: snapshot.documents)) as NSArray).sortedArray(using: [NSSortDescriptor(key: kDATE, ascending: true)]) as! [NSDictionary]
+                self.loadedMessages = self.removeBadMessages(allMessages: sorted) + self.loadedMessages
+                self.maxMessagesNumber = self.loadedMessages.count - (self.loadedMessagesCount - 1)
+                self.minMessagesNumber = self.maxMessagesNumber - kNUMBEROFMESSAGES
+            }
         }
     }
     
@@ -316,6 +481,20 @@ class ChatPageVC: JSQMessagesViewController {
     @objc func backAction() {
         self.navigationController?.popViewController(animated: true)
     }
+    
+    @objc func infoBtnPressed() {
+        
+    }
+    
+    @objc func showGroup() {
+        
+    }
+    
+    @objc func showUserProfile() {
+        let profileVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "profileTableVC") as! ProfileTableVC
+        profileVC.user = withUsers.first
+        self.navigationController?.pushViewController(profileVC, animated: true)
+    }
 }
 
 //MARK: Fix UI issue for iphone x
@@ -327,5 +506,15 @@ extension JSQMessagesInputToolbar {
             let anchor = window.safeAreaLayoutGuide.bottomAnchor
             bottomAnchor.constraint(lessThanOrEqualToSystemSpacingBelow: anchor, multiplier: 1.0).isActive = true
         }
+    }
+}
+
+//MARK: UIImagePickerController delegate methods
+extension ChatPageVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        let video = info[UIImagePickerController.InfoKey.mediaURL] as? NSURL
+        let picture = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
+        sendMessage(text: nil, date: Date(), picture: picture, location: nil, video: video, audio: nil)
+        picker.dismiss(animated: true, completion: nil)
     }
 }

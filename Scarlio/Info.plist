@@ -41,5 +41,19 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>NSCameraUsageDescription</key>
+	<string>Scarlio needs your Camera</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Scarlio needs to access your Media library</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Scarlio needs to access your Photo library</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Scarlio needs your Microphone library</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Scarlio needs your location</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Scarlio needs your location</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Scarlio needs to access your Contacts</string>
 </dict>
 </plist>

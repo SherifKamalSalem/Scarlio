@@ -213,31 +213,23 @@ class FUser {
     
     //phoneNumberRegistration
     class func registerUserWith(phoneNumber: String, verificationCode: String, verificationId: String!, completion: @escaping (_ error: Error?, _ shouldLogin: Bool) -> Void) {
-        
         let credential = PhoneAuthProvider.provider().credential(withVerificationID: verificationId, verificationCode: verificationCode)
         
         Auth.auth().signInAndRetrieveData(with: credential) { (firuser, error) in
-            
             if error != nil {
-                
                 completion(error!, false)
                 return
             }
             
             //check if user exist - login else register
             fetchCurrentUserFromFirestore(userId: firuser!.user.uid, completion: { (user) in
-                
                 if user != nil && user!.firstname != "" {
                     //we have user, login
-                    
                     saveUserLocally(fUser: user!)
                     saveUserToFirestore(fUser: user!)
-                    
                     completion(error, true)
-                    
                 } else {
-                    
-                    //    we have no user, register
+                    // we have no user, register
                     let fUser = FUser(_objectId: firuser!.user.uid, _pushId: "", _createdAt: Date(), _updatedAt: Date(), _email: "", _firstname: "", _lastname: "", _avatar: "", _loginMethod: kPHONE, _phoneNumber: firuser!.user.phoneNumber!, _city: "", _country: "")
                     
                     saveUserLocally(fUser: fUser)
@@ -245,54 +237,36 @@ class FUser {
                     completion(error, false)
                     
                 }
-                
             })
-            
         }
-        
     }
     
     
     //MARK: LogOut func
     
     class func logOutCurrentUser(completion: @escaping (_ success: Bool) -> Void) {
-        
         userDefaults.removeObject(forKey: kPUSHID)
         removeOneSignalId()
-        
         userDefaults.removeObject(forKey: kCURRENTUSER)
         userDefaults.synchronize()
-        
         do {
             try Auth.auth().signOut()
-            
             completion(true)
-            
         } catch let error as NSError {
             completion(false)
             print(error.localizedDescription)
-            
         }
-        
-        
     }
     
     //MARK: Delete user
     
     class func deleteUser(completion: @escaping (_ error: Error?) -> Void) {
-        
         let user = Auth.auth().currentUser
-        
         user?.delete(completion: { (error) in
-            
             completion(error)
         })
-        
     }
-    
 } //end of class funcs
-
-
 
 
 //MARK: Save user funcs
@@ -316,21 +290,14 @@ func saveUserLocally(fUser: FUser) {
 
 //New firestore
 func fetchCurrentUserFromFirestore(userId: String) {
-    
     reference(.User).document(userId).getDocument { (snapshot, error) in
-        
         guard let snapshot = snapshot else {  return }
-        
         if snapshot.exists {
             print("updated current users param")
-            
             UserDefaults.standard.setValue(snapshot.data() as! NSDictionary, forKeyPath: kCURRENTUSER)
             UserDefaults.standard.synchronize()
-            
         }
-        
     }
-    
 }
 
 
@@ -364,73 +331,49 @@ func userDictionaryFrom(user: FUser) -> NSDictionary {
 }
 
 func getUsersFromFirestore(withIds: [String], completion: @escaping (_ usersArray: [FUser]) -> Void) {
-    
     var count = 0
     var usersArray: [FUser] = []
-    
     //go through each user and download it from firestore
     for userId in withIds {
-        
         reference(.User).document(userId).getDocument { (snapshot, error) in
-            
             guard let snapshot = snapshot else {  return }
-            
             if snapshot.exists {
-                
                 let user = FUser(_dictionary: snapshot.data() as! NSDictionary)
                 count += 1
-                
-                //dont add if its current user
+                //don't add if its current user
                 if user.objectId != FUser.currentId() {
                     usersArray.append(user)
                 }
-                
             } else {
                 completion(usersArray)
             }
-            
             if count == withIds.count {
                 //we have finished, return the array
                 completion(usersArray)
             }
-            
         }
-        
     }
 }
 
 
 func updateCurrentUserInFirestore(withValues : [String : Any], completion: @escaping (_ error: Error?) -> Void) {
-    
     if let dictionary = UserDefaults.standard.object(forKey: kCURRENTUSER) {
-        
         var tempWithValues = withValues
-        
         let currentUserId = FUser.currentId()
-        
         let updatedAt = dateFormatter().string(from: Date())
-        
         tempWithValues[kUPDATEDAT] = updatedAt
-        
         let userObject = (dictionary as! NSDictionary).mutableCopy() as! NSMutableDictionary
-        
         userObject.setValuesForKeys(tempWithValues)
-        
         reference(.User).document(currentUserId).updateData(withValues) { (error) in
-            
             if error != nil {
-                
                 completion(error)
                 return
             }
-            
             //update current user
             UserDefaults.standard.setValue(userObject, forKeyPath: kCURRENTUSER)
             UserDefaults.standard.synchronize()
-            
             completion(error)
         }
-        
     }
 }
 
@@ -438,9 +381,7 @@ func updateCurrentUserInFirestore(withValues : [String : Any], completion: @esca
 //MARK: OneSignal
 
 func updateOneSignalId() {
-    
     if FUser.currentUser() != nil {
-        
         if let pushId = UserDefaults.standard.string(forKey: kPUSHID) {
             setOneSignalId(pushId: pushId)
         } else {
@@ -462,7 +403,6 @@ func removeOneSignalId() {
 //MARK: Updating Current user funcs
 
 func updateCurrentUserOneSignalId(newId: String) {
-    
     updateCurrentUserInFirestore(withValues: [kPUSHID : newId]) { (error) in
         if error != nil {
             print("error updating push id \(error!.localizedDescription)")

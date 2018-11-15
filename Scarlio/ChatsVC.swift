@@ -175,7 +175,7 @@ extension ChatsVC : UITableViewDelegate, UITableViewDataSource {
         chatPageVC.memberIds = recent[kMEMBERS] as? [String]
         chatPageVC.membersToPush = recent[kMEMBERSTOPUSH] as? [String]
         chatPageVC.chatRoomId = recent[kCHATROOMID] as? String
-        
+        chatPageVC.isGroup = recent[kTYPE] as! String == kGROUP
         navigationController?.pushViewController(chatPageVC, animated: true)
     }
 }

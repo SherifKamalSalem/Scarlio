@@ -20,6 +20,8 @@
 		42582F992192B03A00F494CB /* WelcomeVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42582F982192B03A00F494CB /* WelcomeVC.swift */; };
 		426DCA242192CB2A00F0742C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 426DCA232192CB2A00F0742C /* GoogleService-Info.plist */; };
 		42839A5F219633870013B8BA /* FinishRegisterationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42839A5E219633870013B8BA /* FinishRegisterationVC.swift */; };
+		4287E6B5219CDAA9002F64B1 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4287E6B4219CDAA9002F64B1 /* Camera.swift */; };
+		4287E6B7219CE982002F64B1 /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4287E6B6219CE982002F64B1 /* Download.swift */; };
 		428B84FC2199497D008D4331 /* ChatsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428B84FB2199497D008D4331 /* ChatsVC.swift */; };
 		42B596B32193253C00435D73 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B596992193252F00435D73 /* Group.swift */; };
 		42B596BF2193253C00435D73 /* FUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B596A52193253500435D73 /* FUser.swift */; };
@@ -48,6 +50,8 @@
 		42582F982192B03A00F494CB /* WelcomeVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeVC.swift; sourceTree = "<group>"; };
 		426DCA232192CB2A00F0742C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		42839A5E219633870013B8BA /* FinishRegisterationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishRegisterationVC.swift; sourceTree = "<group>"; };
+		4287E6B4219CDAA9002F64B1 /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
+		4287E6B6219CE982002F64B1 /* Download.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Download.swift; sourceTree = "<group>"; };
 		428B84FB2199497D008D4331 /* ChatsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsVC.swift; sourceTree = "<group>"; };
 		42B596992193252F00435D73 /* Group.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 		42B596A52193253500435D73 /* FUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FUser.swift; sourceTree = "<group>"; };
@@ -126,6 +130,8 @@
 				42431FEB219A824000E7DDCC /* RecentChatsCell.swift */,
 				424F60C0219BA3E1000AC359 /* OutGoingMessages.swift */,
 				424F60C2219BBB4B000AC359 /* IncomingMessages.swift */,
+				4287E6B4219CDAA9002F64B1 /* Camera.swift */,
+				4287E6B6219CE982002F64B1 /* Download.swift */,
 			);
 			path = Scarlio;
 			sourceTree = "<group>";
@@ -317,9 +323,11 @@
 				42BE22C321990A4D0075E481 /* UserTableVC.swift in Sources */,
 				42431FEC219A824000E7DDCC /* RecentChatsCell.swift in Sources */,
 				42B596CD2193291000435D73 /* Constants.swift in Sources */,
+				4287E6B7219CE982002F64B1 /* Download.swift in Sources */,
 				42B596CF21932C4F00435D73 /* FCollectionReference.swift in Sources */,
 				42582F992192B03A00F494CB /* WelcomeVC.swift in Sources */,
 				421ACFEC2199EE520066BE1D /* ProfileTableVC.swift in Sources */,
+				4287E6B5219CDAA9002F64B1 /* Camera.swift in Sources */,
 				42BE22BF2198ED760075E481 /* SettingsTableVC.swift in Sources */,
 				424F60C1219BA3E1000AC359 /* OutGoingMessages.swift in Sources */,
 				42B596B32193253C00435D73 /* Group.swift in Sources */,
