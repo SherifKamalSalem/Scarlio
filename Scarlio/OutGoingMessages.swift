@@ -38,6 +38,13 @@ class OutGoingMessages {
             ,forKeys: [kMESSAGE as NSCopying, kVIDEO as NSCopying, kTHUMBNAIL as NSCopying, kSENDERID as NSCopying, kSENDERNAME as NSCopying, kDATE as NSCopying, kSTATUS as NSCopying, kTYPE as NSCopying])
     }
     
+    //MARK: Audio Msgs
+    init(message: String, audio: String, senderId: String, senderName: String, date: Date, status: String, type: String) {
+        messagesDictionary = NSMutableDictionary(
+            objects: [message, audio, senderId, senderName, dateFormatter().string(from: date),status, type]
+            ,forKeys: [kMESSAGE as NSCopying, kAUDIO as NSCopying, kSENDERID as NSCopying, kSENDERNAME as NSCopying, kDATE as NSCopying, kSTATUS as NSCopying, kTYPE as NSCopying])
+    }
+    
     //MARK: Send Messages to Firestore
     func sendMessage(chatRoomID: String, messages: NSMutableDictionary, memberIds: [String], membersToPush: [String]) {
         

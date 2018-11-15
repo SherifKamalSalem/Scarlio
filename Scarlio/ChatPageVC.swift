@@ -232,7 +232,8 @@ class ChatPageVC: JSQMessagesViewController {
             self.sendMessage(text: text, date: date, picture: nil, location: nil, video: nil, audio: nil)
             updateSendButton(isSend: false)
         } else {
-            
+            let audioVC = AudioMessage(delegate_: self)
+            audioVC.presentAudioRecorder(target: self)
         }
     }
     
@@ -315,6 +316,20 @@ class ChatPageVC: JSQMessagesViewController {
             }
             return
         }
+        //Send Audio
+        if let audioPath = audio {
+            uploadAudio(audioPath: audioPath, chatRoomId: chatRoomId, view: (self.navigationController?.view)!) { (audioLink) in
+                if audioLink != nil {
+                    let text = "[\(kAUDIO)]"
+                    outgoingMessage = OutGoingMessages(message: text, audio: audioLink!, senderId: currentUser!.objectId, senderName: currentUser!.firstname, date: date, status: kDELIVERED, type: kAUDIO)
+                    JSQSystemSoundPlayer.jsq_playMessageSentSound()
+                    self.finishSendingMessage()
+                    outgoingMessage?.sendMessage(chatRoomID: self.chatRoomId, messages: (outgoingMessage!.messagesDictionary), memberIds: self.memberIds, membersToPush: self.membersToPush)
+                }
+            }
+            return
+        }
+        
         
         //make a sound 🗣🖕💨 to notify user of new coming msgs
         JSQSystemSoundPlayer.jsq_playMessageSentSound()
@@ -564,5 +579,17 @@ extension ChatPageVC: UIImagePickerControllerDelegate, UINavigationControllerDel
         let picture = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
         sendMessage(text: nil, date: Date(), picture: picture, location: nil, video: video, audio: nil)
         picker.dismiss(animated: true, completion: nil)
+    }
+}
+
+extension ChatPageVC : IQAudioRecorderViewControllerDelegate {
+    
+    func audioRecorderController(_ controller: IQAudioRecorderViewController, didFinishWithAudioAtPath filePath: String) {
+        controller.dismiss(animated: true, completion: nil)
+        self.sendMessage(text: nil, date: Date(), picture: nil, location: nil, video: nil, audio: filePath)
+    }
+    
+    func audioRecorderControllerDidCancel(_ controller: IQAudioRecorderViewController) {
+        controller.dismiss(animated: true, completion: nil)
     }
 }

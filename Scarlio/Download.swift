@@ -137,6 +137,36 @@ func downloadVideo(videoUrl: String, completion: @escaping(_ isReadyToPlay: Bool
     }
 }
 
+//MARK: Upload Audio
+func uploadAudio(audioPath: String, chatRoomId: String, view: UIView, completion: @escaping(_ audioLink: String?) -> Void) {
+    let progressHUD = MBProgressHUD.showAdded(to: view, animated: true)
+    progressHUD.mode = .determinateHorizontalBar
+    let dateString = dateFormatter().string(from: Date())
+    let audioFileName = "AudioMessages/" + FUser.currentId() + "/" + chatRoomId + "/" + dateString + ".m4a"
+    let storageRef = storage.reference(forURL: kFILE_REFERENCE).child(audioFileName)
+    var task: StorageUploadTask!
+    guard let audio = NSData(contentsOfFile: audioPath) else { return }
+    task = storageRef.putData(audio as Data, metadata: nil, completion: { (metadata, error) in
+        task.removeAllObservers()
+        progressHUD.hide(animated: true)
+        if error != nil {
+            print("Error couldn't Upload audio \(error?.localizedDescription)")
+            return
+        }
+        storageRef.downloadURL(completion: { (url, error) in
+            guard let downloadURL = url else {
+                completion(nil)
+                return
+            }
+            completion(downloadURL.absoluteString)
+        })
+    })
+    task.observe(StorageTaskStatus.progress) { (snapshot) in
+        progressHUD.progress = Float((snapshot.progress?.completedUnitCount)!) / Float((snapshot.progress?.totalUnitCount)!)
+    }
+}
+
+
 //MARK: Video Thumnail
 func videoThumbnail(video: NSURL) -> UIImage {
     let asset = AVURLAsset(url: video as URL)
