@@ -28,6 +28,16 @@ class OutGoingMessages {
             ,forKeys: [kMESSAGE as NSCopying, kPICTURE as NSCopying, kSENDERID as NSCopying, kSENDERNAME as NSCopying, kDATE as NSCopying, kSTATUS as NSCopying, kTYPE as NSCopying])
     }
     
+    //MARK: Video msgs
+    init(message: String, video: String, thumbnail: NSData, senderId: String, senderName: String, date: Date, status: String, type: String) {
+        
+        let picThumbmail = thumbnail.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
+        
+        messagesDictionary = NSMutableDictionary(
+            objects: [message, video, picThumbmail, senderId, senderName, dateFormatter().string(from: date),status, type]
+            ,forKeys: [kMESSAGE as NSCopying, kVIDEO as NSCopying, kTHUMBNAIL as NSCopying, kSENDERID as NSCopying, kSENDERNAME as NSCopying, kDATE as NSCopying, kSTATUS as NSCopying, kTYPE as NSCopying])
+    }
+    
     //MARK: Send Messages to Firestore
     func sendMessage(chatRoomID: String, messages: NSMutableDictionary, memberIds: [String], membersToPush: [String]) {
         

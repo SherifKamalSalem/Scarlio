@@ -23,6 +23,7 @@
 		4287E6B5219CDAA9002F64B1 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4287E6B4219CDAA9002F64B1 /* Camera.swift */; };
 		4287E6B7219CE982002F64B1 /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4287E6B6219CE982002F64B1 /* Download.swift */; };
 		4287E6B9219D0D30002F64B1 /* PhotoMediaItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4287E6B8219D0D30002F64B1 /* PhotoMediaItem.swift */; };
+		4287E6BB219D33C8002F64B1 /* VideoMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4287E6BA219D33C8002F64B1 /* VideoMessage.swift */; };
 		428B84FC2199497D008D4331 /* ChatsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428B84FB2199497D008D4331 /* ChatsVC.swift */; };
 		42B596B32193253C00435D73 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B596992193252F00435D73 /* Group.swift */; };
 		42B596BF2193253C00435D73 /* FUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42B596A52193253500435D73 /* FUser.swift */; };
@@ -54,6 +55,7 @@
 		4287E6B4219CDAA9002F64B1 /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		4287E6B6219CE982002F64B1 /* Download.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Download.swift; sourceTree = "<group>"; };
 		4287E6B8219D0D30002F64B1 /* PhotoMediaItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoMediaItem.swift; sourceTree = "<group>"; };
+		4287E6BA219D33C8002F64B1 /* VideoMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoMessage.swift; sourceTree = "<group>"; };
 		428B84FB2199497D008D4331 /* ChatsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatsVC.swift; sourceTree = "<group>"; };
 		42B596992193252F00435D73 /* Group.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 		42B596A52193253500435D73 /* FUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FUser.swift; sourceTree = "<group>"; };
@@ -135,6 +137,7 @@
 				4287E6B4219CDAA9002F64B1 /* Camera.swift */,
 				4287E6B6219CE982002F64B1 /* Download.swift */,
 				4287E6B8219D0D30002F64B1 /* PhotoMediaItem.swift */,
+				4287E6BA219D33C8002F64B1 /* VideoMessage.swift */,
 			);
 			path = Scarlio;
 			sourceTree = "<group>";
@@ -338,6 +341,7 @@
 				4241A888219A539500399017 /* Recent.swift in Sources */,
 				42B596BF2193253C00435D73 /* FUser.swift in Sources */,
 				424F60C3219BBB4B000AC359 /* IncomingMessages.swift in Sources */,
+				4287E6BB219D33C8002F64B1 /* VideoMessage.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

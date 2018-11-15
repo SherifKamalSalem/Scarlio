@@ -51,7 +51,7 @@ func imageFromInitials(firstName: String?, lastName: String?, withBlock: @escapi
 
 func imageFromData(pictureData: String, withBlock: @escaping(_ image: UIImage?) -> Void) {
     var image: UIImage?
-    let decodedData = NSData(base64Encoded: pictureData, options: NSData.Base64DecodingOptions(rawValue: 0))
+    let decodedData = Data(base64Encoded: pictureData, options: Data.Base64DecodingOptions.ignoreUnknownCharacters)
     image = UIImage(data: decodedData! as Data)
     withBlock(image)
 }
