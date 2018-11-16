@@ -166,7 +166,19 @@ class UserTableVC: UITableViewController {
             let users = self.allUserGrouped[sectionTitle]
             user = users![indexPath.row]
         }
-        startPrivateChat(firstUser: FUser.currentUser()!, secondUser: user)
+        if !checkBlockedStatus(ofUser: user) {
+            let chatsVC = ChatPageVC()
+            chatsVC.titleName = user.firstname
+            chatsVC.membersToPush = [FUser.currentId(), user.objectId]
+            chatsVC.memberIds = [FUser.currentId(), user.objectId]
+            chatsVC.chatRoomId = startPrivateChat(firstUser: FUser.currentUser()!, secondUser: user)
+            chatsVC.isGroup = false
+            chatsVC.hidesBottomBarWhenPushed = true
+            self.navigationController?.pushViewController(chatsVC, animated: true)
+            
+        } else {
+            ProgressHUD.showError("This user is not available for chat!")
+        }
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {

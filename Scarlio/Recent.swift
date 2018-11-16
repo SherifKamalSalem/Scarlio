@@ -178,3 +178,30 @@ func updateExistingRecent(withValues values: [String : Any], chatRoomId: String,
 func update(recentId recentId: String, withValues values: [String : Any]) {
     reference(.Recent).document(recentId).updateData(values)
 }
+
+//MARK: Block User
+func block(userToBlock user: FUser) {
+    let firstUserId = FUser.currentId()
+    let secondUserId = user.objectId
+    
+    var chatRoomId = ""
+    let value = firstUserId.compare(secondUserId).rawValue
+    if value < 0 {
+        chatRoomId = firstUserId + secondUserId
+    } else {
+        chatRoomId = secondUserId + firstUserId
+    }
+    deleteRecentsFor(chatRoomId: chatRoomId)
+}
+
+func deleteRecentsFor(chatRoomId: String) {
+    reference(.Recent).whereField(kCHATROOMID, isEqualTo: chatRoomId).getDocuments { (snapshot, error) in
+        guard let snapshot = snapshot else { return }
+        if !snapshot.isEmpty {
+            for recent in snapshot.documents {
+                let recent = recent.data() as NSDictionary
+                deleteRecentChat(recentChats: recent)
+            }
+        }
+    }
+}

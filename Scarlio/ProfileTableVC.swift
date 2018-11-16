@@ -27,7 +27,7 @@ class ProfileTableVC: UITableViewController {
         setupUI()
     }
     
-    //MARK: IBActions
+    //MARK: IBActions   
     @IBAction func callBtnPressed(_ sender: Any) {
         
     }
@@ -50,6 +50,8 @@ class ProfileTableVC: UITableViewController {
             }
             self.updateBlockStatus()
         }
+        //remove all chats between current user and blocked user
+        block(userToBlock: user!)
     }
     
     // MARK: - Table view data source
