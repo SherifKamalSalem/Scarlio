@@ -354,6 +354,19 @@ class ChatPageVC: JSQMessagesViewController {
     
     //MARK: load all messages
     func loadMessages() {
+        //to update message status
+        updatedChatListener = reference(.Message).document(FUser.currentId()).collection(chatRoomId).addSnapshotListener({ (snapshot, error) in
+            guard let snapshot = snapshot else { return }
+            if !snapshot.isEmpty {
+                
+                snapshot.documentChanges.forEach({(diff) in
+                    if diff.type == .modified {
+                        //update message with new status
+                        self.updateMessage(messageDictionary: diff.document.data() as NSDictionary)
+                    }
+                })
+            }
+        })
         //get last 11 msgs
         reference(.Message).document(FUser.currentId()).collection(chatRoomId).order(by: kDATE, descending: true).limit(to: 11).getDocuments { (snapshot, error) in
             guard let snapshot = snapshot else {
@@ -371,6 +384,17 @@ class ChatPageVC: JSQMessagesViewController {
             self.getOldMessagesInBackground()
             self.listenForNewChats()
             print("we have \(self.messages.count) messages loaded")
+        }
+    }
+    
+    //MARK: update message
+    func updateMessage(messageDictionary: NSDictionary) {
+        for index in 0 ..< objectMessages.count {
+            let temp = objectMessages[index]
+            if messageDictionary[kMESSAGEID] as! String == temp[kMESSAGEID] as! String {
+                objectMessages[index] = messageDictionary
+                self.collectionView!.reloadData()
+            }
         }
     }
     
@@ -420,7 +444,7 @@ class ChatPageVC: JSQMessagesViewController {
         let incomingMessage = IncomingMessages(collectionView_: self.collectionView!)
         //incoming msgs
         if (messageDictionary[kSENDERID] as! String) != FUser.currentId() {
-            
+            OutGoingMessages.updateMessage(withId: messageDictionary[kMESSAGEID] as! String, chatRoomId: chatRoomId, memberIds: memberIds)
         }
         
         let message = incomingMessage.createMessage(messages: messageDictionary, chatRoomId: chatRoomId)
