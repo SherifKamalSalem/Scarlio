@@ -296,6 +296,21 @@ class ChatPageVC: JSQMessagesViewController {
         }
     }
     
+    override func collectionView(_ collectionView: JSQMessagesCollectionView!, didTapAvatarImageView avatarImageView: UIImageView!, at indexPath: IndexPath!) {
+        let senderId = messages[indexPath.row].senderId
+        var selecedUser: FUser?
+        if senderId == FUser.currentId() {
+            selecedUser = FUser.currentUser()
+        } else {
+            for user in withUsers {
+                if user.objectId == senderId {
+                    selecedUser = user
+                }
+            }
+        }
+        presentUserProfile(forUser: selecedUser!)
+    }
+    
     override func textViewDidChange(_ textView: UITextView) {
         if textView.text != "" {
             updateSendButton(isSend: true)
@@ -693,6 +708,12 @@ class ChatPageVC: JSQMessagesViewController {
     @objc func showUserProfile() {
         let profileVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "profileTableVC") as! ProfileTableVC
         profileVC.user = withUsers.first
+        self.navigationController?.pushViewController(profileVC, animated: true)
+    }
+    
+    func presentUserProfile(forUser: FUser) {
+        let profileVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "profileTableVC") as! ProfileTableVC
+        profileVC.user = forUser
         self.navigationController?.pushViewController(profileVC, animated: true)
     }
     
