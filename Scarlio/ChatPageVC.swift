@@ -34,12 +34,17 @@ class ChatPageVC: JSQMessagesViewController {
     var loadedMessages: [NSDictionary] = []
     var allPictureMessages: [String] = []
     var initialLoadComplete: Bool = false
+    //avatar
+    var jsqAvatarDictionary: NSMutableDictionary?
+    var avatarImageDictionary: NSMutableDictionary?
+    var showAvatars = true
+    var firstLoad: Bool?
     //number of loaded msgs
     var maxMessagesNumber = 0
     var minMessagesNumber = 0
     var loadOld = false
     var loadedMessagesCount = 0
-    
+    //Typing indicator counter
     var typingCounter = 0
     //listener for new messages, notify user for read msg status and typing
     var typingListener: ListenerRegistration?
@@ -89,6 +94,8 @@ class ChatPageVC: JSQMessagesViewController {
         
         collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize.zero
         collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize.zero
+        
+        jsqAvatarDictionary = [ : ]
         setCustomTitle()
         
         loadMessages()
@@ -180,7 +187,14 @@ class ChatPageVC: JSQMessagesViewController {
     }
     
     override func collectionView(_ collectionView: JSQMessagesCollectionView!, avatarImageDataForItemAt indexPath: IndexPath!) -> JSQMessageAvatarImageDataSource! {
-        return nil
+        let message = messages[indexPath.row]
+        var avatar: JSQMessageAvatarImageDataSource
+        if let test = jsqAvatarDictionary!.object(forKey: message.senderId) {
+            avatar = test as! JSQMessageAvatarImageDataSource
+        } else {
+            avatar = JSQMessagesAvatarImageFactory.avatarImage(with: UIImage(named: "avatarPlaceholder"), diameter: 70)
+        }
+        return avatar
     }
     
     //MARK: JSQMessages delegate functions
@@ -377,6 +391,7 @@ class ChatPageVC: JSQMessagesViewController {
                 //initial loading is done successfully
                 self.initialLoadComplete = true
                 //listen for new chats
+                self.listenForNewChats()
                 return
             }
             
@@ -476,11 +491,67 @@ class ChatPageVC: JSQMessagesViewController {
         
         getUsersFromFirestore(withIds: memberIds) { (withUsers) in
             self.withUsers = withUsers
+            self.getAvatarImages()
             if !self.isGroup! {
                 self.setUIForSingleChat()
             }
         }
     }
+    
+    //MARK: Get Avatars
+    func getAvatarImages() {
+        if showAvatars {
+            collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize(width: 30, height: 30)
+            collectionView.collectionViewLayout.outgoingAvatarViewSize = CGSize(width: 30, height: 30)
+            //get current user avatar
+            avatarImageFrom(fUser: FUser.currentUser()!)
+            for user in withUsers {
+                avatarImageFrom(fUser: user)
+            }
+        }
+    }
+    
+    func avatarImageFrom(fUser: FUser) {
+        if fUser.avatar != "" {
+            dataImageFromString(pictureString: fUser.avatar) { (imageData) in
+                if imageData == nil {
+                    return
+                }
+                
+                if self.avatarImageDictionary != nil {
+                    //Update avatar fi we had one
+                    self.avatarImageDictionary!.removeObject(forKey: fUser.objectId)
+                    self.avatarImageDictionary?.setObject(imageData, forKey: fUser.objectId as NSCopying)
+                } else {
+                    self.avatarImageDictionary = [fUser.objectId : imageData!]
+                }
+                //create JSQAvatars
+                self.createJSQAvatars(avatarDictionary: self.avatarImageDictionary)
+            }
+        }
+    }
+    
+    //MARK: create jsqavatar
+    func createJSQAvatars(avatarDictionary: NSMutableDictionary?) {
+        //creating default placeholder for user if having no avatar
+        let defaultAvatar = JSQMessagesAvatarImageFactory.avatarImage(with: UIImage(named: "avatarPlaceholder"), diameter: 70)
+        
+        if avatarDictionary != nil {
+            for userId in memberIds {
+                //check for each member in group for it's avatar
+                if let avatarImageData = avatarDictionary![userId] {
+                    //if user has avatar create JSQ one for him
+                    let jsqAvatar = JSQMessagesAvatarImageFactory.avatarImage(with: UIImage(data: avatarImageData as! Data), diameter: 70)
+                    self.jsqAvatarDictionary!.setValue(jsqAvatar, forKey: userId)
+                } else {
+                    //if user has not one give him default one
+                    self.jsqAvatarDictionary!.setValue(defaultAvatar, forKey: userId)
+                }
+            }
+            self.collectionView.reloadData()
+        }
+    }
+    
     //MARK: set UI for single chat
     func setUIForSingleChat() {
         let withUser = withUsers.first!

@@ -49,9 +49,9 @@ func imageFromInitials(firstName: String?, lastName: String?, withBlock: @escapi
     withBlock(img!)
 }
 
-func imageFromData(pictureData: String, withBlock: @escaping(_ image: UIImage?) -> Void) {
+func imageFromData(pictureData: String, withBlock: (_ image: UIImage?) -> Void) {
     var image: UIImage?
-    let decodedData = Data(base64Encoded: pictureData, options: Data.Base64DecodingOptions.ignoreUnknownCharacters)
+    let decodedData = NSData(base64Encoded: pictureData, options: NSData.Base64DecodingOptions(rawValue: 0))
     image = UIImage(data: decodedData! as Data)
     withBlock(image)
 }
@@ -82,6 +82,12 @@ func timeElapsed(date: Date) -> String {
         elapsed = "\(currentDateFormatter.string(from: date))"
     }
     return elapsed!
+}
+
+//MARK: for avatar
+func dataImageFromString(pictureString: String, withBlock: (_ image: Data?) -> Void) {
+    let imageData = NSData(base64Encoded: pictureString, options: NSData.Base64DecodingOptions(rawValue: 0))
+    withBlock(imageData as Data?)
 }
 
 //MARK: for calls and chats
