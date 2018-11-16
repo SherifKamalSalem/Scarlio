@@ -84,6 +84,15 @@ class ChatPageVC: JSQMessagesViewController {
         perform(Selector(("jsq_updateCollectionViewInsets")))
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        clearRecentCounter(chatRoomId: chatRoomId)
+        super.viewWillAppear(animated)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        clearRecentCounter(chatRoomId: chatRoomId)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         //notify the other user if current is typing
@@ -415,6 +424,7 @@ class ChatPageVC: JSQMessagesViewController {
             self.insertMessages()
             self.finishReceivingMessage(animated: true)
             self.initialLoadComplete = true
+            self.getPictureMessages()
             self.getOldMessagesInBackground()
             self.listenForNewChats()
             print("we have \(self.messages.count) messages loaded")
@@ -608,7 +618,7 @@ class ChatPageVC: JSQMessagesViewController {
                         if let type = item[kTYPE] {
                             if self.legitTypes.contains(type as! String) {
                                 if type as! String == kPICTURE {
-                                    
+                                    self.addNewPictureMessageLink(link: item[kPICTURE] as! String)
                                 }
                                 if self.insertInitialLoadMessages(messageDictionary: item) {
                                     JSQSystemSoundPlayer.jsq_playMessageReceivedSound()
@@ -630,6 +640,7 @@ class ChatPageVC: JSQMessagesViewController {
                 guard let snapshot = snapshot else { return }
                 let sorted = ((dictionaryFromSnapshots(snapshots: snapshot.documents)) as NSArray).sortedArray(using: [NSSortDescriptor(key: kDATE, ascending: true)]) as! [NSDictionary]
                 self.loadedMessages = self.removeBadMessages(allMessages: sorted) + self.loadedMessages
+                self.getPictureMessages()
                 self.maxMessagesNumber = self.loadedMessages.count - (self.loadedMessagesCount - 1)
                 self.minMessagesNumber = self.maxMessagesNumber - kNUMBEROFMESSAGES
             }
@@ -642,6 +653,19 @@ class ChatPageVC: JSQMessagesViewController {
         } else {
             ProgressHUD.showError("Please give access to location in Settings")
             return false
+        }
+    }
+    
+    func addNewPictureMessageLink(link: String) {
+        allPictureMessages.append(link)
+    }
+    
+    func getPictureMessages() {
+        allPictureMessages = []
+        for message in loadedMessages {
+            if message[kTYPE] as! String == kPICTURE {
+                allPictureMessages.append(message[kPICTURE] as! String)
+            }
         }
     }
     
@@ -693,12 +717,15 @@ class ChatPageVC: JSQMessagesViewController {
     
     //MARK: IBActions navigation back from chat page VC
     @objc func backAction() {
+        clearRecentCounter(chatRoomId: chatRoomId)
         removeListeners()
         self.navigationController?.popViewController(animated: true)
     }
     
     @objc func infoBtnPressed() {
-        
+        let mediaVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "pictureCollectionVC") as! PictureCollectionVC
+        mediaVC.allImagesLinks = allPictureMessages
+        self.navigationController?.pushViewController(mediaVC, animated: true)
     }
     
     @objc func showGroup() {

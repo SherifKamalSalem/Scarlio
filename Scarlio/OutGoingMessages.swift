@@ -60,6 +60,7 @@ class OutGoingMessages {
         for memberId in memberIds {
             reference(.Message).document(memberId).collection(chatRoomID).document(messageId).setData(messages as! [String : Any])
         }
+        updateRecents(chatRoomId: chatRoomID, lastMessage: messages[kMESSAGE] as! String)
     }
     
     //MARK: Delete Message
