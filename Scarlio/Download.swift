@@ -150,7 +150,7 @@ func uploadAudio(audioPath: String, chatRoomId: String, view: UIView, completion
         task.removeAllObservers()
         progressHUD.hide(animated: true)
         if error != nil {
-            print("Error couldn't Upload audio \(error?.localizedDescription)")
+            print("Error couldn't Upload audio \(error!.localizedDescription)")
             return
         }
         storageRef.downloadURL(completion: { (url, error) in
@@ -166,6 +166,33 @@ func uploadAudio(audioPath: String, chatRoomId: String, view: UIView, completion
     }
 }
 
+//MARK: Download Audio
+func downloadAudio(audioUrl: String, completion: @escaping(_ audioFileName: String?) -> Void) {
+    let audioURL = NSURL(string: audioUrl)
+    let audioFileName = (audioUrl.components(separatedBy: "%").last!).components(separatedBy: "?").first!
+    if fileExistsAtPath(path: audioFileName) {
+        completion(audioFileName)
+    } else {
+        let downloadQueue = DispatchQueue(label: "audioDownloadQueue")
+        //Save image to document directory
+        downloadQueue.async {
+            let data = NSData(contentsOf: audioURL! as URL)
+            if data != nil {
+                var docURL = getDocumentURL()
+                docURL = docURL.appendingPathComponent(audioFileName, isDirectory: false)
+                data?.write(to: docURL, atomically: true)
+                DispatchQueue.main.async {
+                    completion(audioFileName)
+                }
+            } else {
+                DispatchQueue.main.async {
+                    print("No audio in Firebase DB")
+                    completion(nil)
+                }
+            }
+        }
+    }
+}
 
 //MARK: Video Thumnail
 func videoThumbnail(video: NSURL) -> UIImage {

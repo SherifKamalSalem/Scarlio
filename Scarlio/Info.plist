@@ -49,7 +49,7 @@
 	<string>Scarlio needs to access your Photo library</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Scarlio needs your Microphone library</string>
-	<key>NSLocationUsageDescription</key>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>Scarlio needs your location</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Scarlio needs your location</string>

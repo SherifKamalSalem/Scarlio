@@ -89,6 +89,8 @@ public let kSENDERID = "senderId"
 public let kSENDERNAME = "senderName"
 public let kTHUMBNAIL = "thumbnail"
 public let kISDELETED = "isDeleted"
+public let kLATITUDE = "latitude"
+public let kLONGITUDE = "longitude"
 
 //MARK: Contacts
 public let kCONTACT = "contact"

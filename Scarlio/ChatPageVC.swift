@@ -18,6 +18,8 @@ import FirebaseFirestore
 class ChatPageVC: JSQMessagesViewController {
 
     //MARK: Variables
+    let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    
     var chatRoomId: String!
     var memberIds: [String]!
     var membersToPush: [String]!
@@ -109,7 +111,6 @@ class ChatPageVC: JSQMessagesViewController {
                 cell.textView.textColor = .black
             }
         }
-        
         return cell
     }
     
@@ -195,7 +196,9 @@ class ChatPageVC: JSQMessagesViewController {
         }
         
         let shareLocation = UIAlertAction(title: "Share Location", style: .default) { (action) in
-            
+            if self.haveAccessToUserLocation() {
+                self.sendMessage(text: nil, date: Date(), picture: nil, location: kLOCATION, video: nil, audio: nil)
+            }
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel) { (action) in
@@ -329,7 +332,14 @@ class ChatPageVC: JSQMessagesViewController {
             }
             return
         }
-        
+        //MARK: Send location msg
+        if location != nil {
+            let lat : NSNumber = NSNumber(value: appDelegate.coordinates?.latitude ?? 0.0)
+            let lng : NSNumber = NSNumber(value: appDelegate.coordinates?.longitude ?? 0.0)
+            
+            let text = "[\(kLOCATION)]"
+            outgoingMessage = OutGoingMessages(message: text, latitude: lat, longitude: lng, senderId: currentUser!.objectId, senderName: currentUser!.firstname, date: date, status: kDELIVERED, type: kLOCATION)
+        }
         
         //make a sound 🗣🖕💨 to notify user of new coming msgs
         JSQSystemSoundPlayer.jsq_playMessageSentSound()
@@ -504,6 +514,15 @@ class ChatPageVC: JSQMessagesViewController {
                 self.maxMessagesNumber = self.loadedMessages.count - (self.loadedMessagesCount - 1)
                 self.minMessagesNumber = self.maxMessagesNumber - kNUMBEROFMESSAGES
             }
+        }
+    }
+    //MARK: Location Access
+    func haveAccessToUserLocation() -> Bool {
+        if appDelegate.locationManager != nil {
+            return true
+        } else {
+            ProgressHUD.showError("Please give access to location in Settings")
+            return false
         }
     }
     
