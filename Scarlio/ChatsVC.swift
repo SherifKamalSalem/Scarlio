@@ -100,6 +100,19 @@ class ChatsVC: UIViewController {
         tableView.reloadData()
     }
     
+    //MARK: Helper Functions
+    func updatePushMembers(recent: NSDictionary, isMute: Bool) {
+        var membersToPush = recent[kMEMBERSTOPUSH] as! [String]
+        if isMute {
+            let index = membersToPush.index(of: FUser.currentId())!
+            membersToPush.remove(at: index)
+        } else {
+            membersToPush.append(FUser.currentId())
+        }
+        //save to firebase
+        updateExistingRecent(withValues: [kMEMBERSTOPUSH : membersToPush], chatRoomId: recent[kCHATROOMID] as! String, members: recent[kMEMBERS] as! [String])
+    }
+    
     @objc func groupButtonPressed() {
         
     }
@@ -152,7 +165,7 @@ extension ChatsVC : UITableViewDelegate, UITableViewDataSource {
         }
         
         let muteAction = UITableViewRowAction(style: .default, title: muteTitle) { (action, indexPath) in
-            
+            self.updatePushMembers(recent: tempRecent, isMute: mute)
         }
         muteAction.backgroundColor = #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1)
         return [deleteAction, muteAction]

@@ -159,3 +159,22 @@ func clearRecentCounter(chatRoomId: String) {
 func clearRecentCounterItem(recent: NSDictionary) {
     reference(.Recent).document(recent[kRECENTID] as! String).updateData([kCOUNTER : 0])
 }
+
+//MARK: Update mute/unmute status
+func updateExistingRecent(withValues values: [String : Any], chatRoomId: String, members: [String]) {
+    reference(.Recent).whereField(kCHATROOMID, isEqualTo: chatRoomId).getDocuments { (snapshot, error) in
+        guard let snapshot = snapshot else { return }
+        if !snapshot.isEmpty {
+            for recent in snapshot.documents {
+                let recent = recent.data() as NSDictionary
+                update(recentId: recent[kRECENTID] as! String, withValues: values)
+            }
+        }
+    }
+}
+
+//MARK: update
+
+func update(recentId recentId: String, withValues values: [String : Any]) {
+    reference(.Recent).document(recentId).updateData(values)
+}
