@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import ProgressHUD
 
 class SettingsTableVC: UITableViewController {
 
@@ -16,6 +17,7 @@ class SettingsTableVC: UITableViewController {
     @IBOutlet weak var fullnameLbl: UILabel!
     @IBOutlet weak var deleteAccountBtn: UIButton!
     @IBOutlet weak var avatarStatusSwitch: UISwitch!
+    @IBOutlet weak var versionNumberLbl: UILabel!
     
     //Variables
     var avatarStatus: Bool = false
@@ -41,7 +43,7 @@ class SettingsTableVC: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 3
+        return 4
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -89,7 +91,15 @@ class SettingsTableVC: UITableViewController {
     }
     
     @IBAction func clearCacheBtnPressed(_ sender: Any) {
-       
+        do {
+            let files = try FileManager.default.contentsOfDirectory(atPath: getDocumentURL().path)
+            for file in files {
+                try FileManager.default.removeItem(atPath: "\(getDocumentURL().path)/\(file)")
+            }
+            ProgressHUD.showSuccess("Cache cleaned successfully.")
+        } catch {
+            ProgressHUD.showError("Couldn't clean media files")
+        }
     }
     
     @IBAction func logoutBtnPressed(_ sender: Any) {
@@ -101,7 +111,27 @@ class SettingsTableVC: UITableViewController {
     }
     
     @IBAction func deleteAccountBtnPressed(_ sender: Any) {
+        let optionMenu = UIAlertController(title: "Delete Account", message: "Are you sure you want to delete this account", preferredStyle: .actionSheet)
+        let deleteAction = UIAlertAction(title: "Delete", style: .destructive) { (action) in
+            self.deleteUser()
+        }
         
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        optionMenu.addAction(deleteAction)
+        optionMenu.addAction(cancelAction)
+        
+        if UI_USER_INTERFACE_IDIOM() == .pad {
+            if let currentPopoverpresentController = optionMenu.popoverPresentationController {
+                currentPopoverpresentController.sourceView = deleteAccountBtn
+                currentPopoverpresentController.sourceRect = deleteAccountBtn.bounds
+                
+                currentPopoverpresentController.permittedArrowDirections = .up
+                self.present(optionMenu, animated: true, completion: nil)
+            }
+        } else {
+            present(optionMenu, animated: true, completion: nil)
+        }
     }
     
     func showLoginView() {
@@ -120,7 +150,9 @@ class SettingsTableVC: UITableViewController {
                 }
             }
         }
-        //set app version
+        if let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String {
+            versionNumberLbl.text = version
+        }
         
     }
     //MARK: User defaults
@@ -139,5 +171,25 @@ class SettingsTableVC: UITableViewController {
         }
         avatarStatus = userDefaults.bool(forKey: kSHOWAVATAR)
         avatarStatusSwitch.isOn = avatarStatus
+    }
+    
+    //MARK: delete Account
+    
+    func deleteUser() {
+        //locally
+        userDefaults.removeObject(forKey: kPUSHID)
+        userDefaults.removeObject(forKey: kCURRENTUSER)
+        userDefaults.synchronize()
+        //remotely
+        reference(.User).document(FUser.currentId()).delete()
+        FUser.deleteUser { (error) in
+            if error != nil {
+                DispatchQueue.main.async {
+                    ProgressHUD.showError("Couldn't Delete User")
+                }
+                return
+            }
+            self.showLoginView()
+        }
     }
 }
