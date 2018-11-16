@@ -39,6 +39,8 @@ class ChatPageVC: JSQMessagesViewController {
     var minMessagesNumber = 0
     var loadOld = false
     var loadedMessagesCount = 0
+    
+    var typingCounter = 0
     //listener for new messages, notify user for read msg status and typing
     var typingListener: ListenerRegistration?
     var updatedChatListener: ListenerRegistration?
@@ -79,6 +81,8 @@ class ChatPageVC: JSQMessagesViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //notify the other user if current is typing
+        createTypingObserver()
         
         navigationItem.largeTitleDisplayMode = .never
         self.navigationItem.leftBarButtonItems = [UIBarButtonItem(image: UIImage(named: "Back"), style: .plain, target: self, action: #selector(self.backAction))]
@@ -579,6 +583,19 @@ class ChatPageVC: JSQMessagesViewController {
         return tempMsgs
     }
     
+    //MARK: Remove Listeners
+    func removeListeners() {
+        if typingListener != nil {
+            typingListener?.remove()
+        }
+        if newChatListener != nil {
+            newChatListener?.remove()
+        }
+        if updatedChatListener != nil {
+            updatedChatListener?.remove()
+        }
+    }
+    
     //MARK: custom send button
     func updateSendButton(isSend: Bool) {
         if isSend {
@@ -588,8 +605,9 @@ class ChatPageVC: JSQMessagesViewController {
         }
     }
     
-    //MARK: navigation back from chat page VC
+    //MARK: IBActions navigation back from chat page VC
     @objc func backAction() {
+        removeListeners()
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -606,7 +624,51 @@ class ChatPageVC: JSQMessagesViewController {
         profileVC.user = withUsers.first
         self.navigationController?.pushViewController(profileVC, animated: true)
     }
+    
+    //MARK: Typing Observer
+    func createTypingObserver() {
+        //notify the other user if current is typing
+        typingListener = reference(.Typing).document(chatRoomId).addSnapshotListener({ (snapshot, error) in
+            guard let snapshot = snapshot else { return }
+            if snapshot.exists {
+                for data in snapshot.data()! {
+                    if data.key != FUser.currentId() {
+                        let isTyping = data.value as! Bool
+                        self.showTypingIndicator = isTyping
+                        if isTyping {
+                            self.scrollToBottom(animated: true)
+                        }
+                    }
+                }
+            } else {
+                reference(.Typing).document(self.chatRoomId).setData([FUser.currentId() : false])
+            }
+        })
+    }
+    
+    func typingCounterStart() {
+        typingCounter += 1
+        typingCounterSave(isTyping: true)
+        self.perform(#selector(self.typingCounterStop), with: nil, afterDelay: 2.0)
+    }
+    
+    @objc func typingCounterStop() {
+        typingCounter -= 1
+        if typingCounter == 0 {
+            typingCounterSave(isTyping: false)
+        }
+    }
+    
+    func typingCounterSave(isTyping: Bool) {
+        reference(.Typing).document(chatRoomId).updateData([FUser.currentId() : isTyping])
+    }
+    
+    override func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+            typingCounterStart()
+            return true
+    }
 }
+
 
 //MARK: Fix UI issue for iphone x
 extension JSQMessagesInputToolbar {
@@ -630,6 +692,7 @@ extension ChatPageVC: UIImagePickerControllerDelegate, UINavigationControllerDel
     }
 }
 
+//MARK: Record Audio message
 extension ChatPageVC : IQAudioRecorderViewControllerDelegate {
     
     func audioRecorderController(_ controller: IQAudioRecorderViewController, didFinishWithAudioAtPath filePath: String) {
@@ -641,3 +704,4 @@ extension ChatPageVC : IQAudioRecorderViewControllerDelegate {
         controller.dismiss(animated: true, completion: nil)
     }
 }
+
