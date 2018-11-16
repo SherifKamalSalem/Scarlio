@@ -267,7 +267,12 @@ class ChatPageVC: JSQMessagesViewController {
             self.present(moviePlayer, animated: true) {
                 moviePlayer.player?.play()
             }
-            
+        case kLOCATION:
+            let message = messages[indexPath.row]
+            let locMediaItem = message.media as! JSQLocationMediaItem
+            let mapView = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "mapVC") as! MapVC
+            mapView.location = locMediaItem.location
+            self.navigationController?.pushViewController(mapView, animated: true)
         default:
             print("")
         }
