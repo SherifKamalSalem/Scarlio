@@ -23,7 +23,7 @@ public let kFILE_REFERENCE = "gs://scarlio-962f0.appspot.com"
 public let kONESIGNALAPPID = ""
 public let kSINCHKEY = ""
 public let kSINCHSECRET = ""
-public let kAPPURL = ""
+public let kAPPURL = "App Link"
 
 //MARK: Firebase Headers
 public let kUSER_PATH = "User"
