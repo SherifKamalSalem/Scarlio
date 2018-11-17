@@ -611,6 +611,9 @@
                                                     <rect key="frame" x="16" y="6" width="309" height="32"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
                                                     <state key="normal" title="Blocked Users"/>
+                                                    <connections>
+                                                        <segue destination="kef-p0-w3S" kind="push" id="x2t-Y2-6YI"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <constraints>
@@ -994,6 +997,84 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ola-IR-5i0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3944.8000000000002" y="393.55322338830587"/>
+        </scene>
+        <!--Blocked Users-->
+        <scene sceneID="nXn-B9-YsA">
+            <objects>
+                <viewController hidesBottomBarWhenPushed="YES" id="kef-p0-w3S" customClass="BlockedUsersVC" customModule="Scarlio" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="UVA-YR-kYC">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="100" estimatedRowHeight="100" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="TrH-MC-bBI">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="userCell" rowHeight="100" id="xv0-7F-lPu" customClass="UserTableViewCell" customModule="Scarlio" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="100"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="xv0-7F-lPu" id="eYp-Dc-STe">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="99.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="avatarPlaceholder" translatesAutoresizingMaskIntoConstraints="NO" id="Yqt-cJ-PRi">
+                                                    <rect key="frame" x="15" y="20" width="60" height="60"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="60" id="MhM-d2-aNF"/>
+                                                        <constraint firstAttribute="height" constant="60" id="wqT-rc-Sr2"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="FULLNAME" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DJ1-zO-MPc">
+                                                    <rect key="frame" x="85" y="39.5" width="275" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Yqt-cJ-PRi" firstAttribute="leading" secondItem="eYp-Dc-STe" secondAttribute="leadingMargin" id="Cfp-ws-oV4"/>
+                                                <constraint firstItem="DJ1-zO-MPc" firstAttribute="leading" secondItem="Yqt-cJ-PRi" secondAttribute="trailing" constant="10" id="EQr-32-Pzn"/>
+                                                <constraint firstItem="DJ1-zO-MPc" firstAttribute="centerY" secondItem="eYp-Dc-STe" secondAttribute="centerY" id="FQP-Or-PGj"/>
+                                                <constraint firstItem="DJ1-zO-MPc" firstAttribute="trailing" secondItem="eYp-Dc-STe" secondAttribute="trailingMargin" id="ZDi-Ey-tJD"/>
+                                                <constraint firstItem="Yqt-cJ-PRi" firstAttribute="centerY" secondItem="eYp-Dc-STe" secondAttribute="centerY" id="x66-2A-5Hj"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="fullNameLbl" destination="DJ1-zO-MPc" id="LVB-1W-gnp"/>
+                                            <outlet property="userImg" destination="Yqt-cJ-PRi" id="LGq-VU-Cru"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No Blocked Users" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fue-LT-uun">
+                                <rect key="frame" x="16" y="355" width="343" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="TrH-MC-bBI" firstAttribute="leading" secondItem="z7Y-0m-lNb" secondAttribute="leading" id="5BO-Qu-tMt"/>
+                            <constraint firstItem="Fue-LT-uun" firstAttribute="leading" secondItem="z7Y-0m-lNb" secondAttribute="leading" constant="16" id="B14-OP-dtN"/>
+                            <constraint firstItem="z7Y-0m-lNb" firstAttribute="trailing" secondItem="Fue-LT-uun" secondAttribute="trailing" constant="16" id="JCr-c6-2Dm"/>
+                            <constraint firstItem="TrH-MC-bBI" firstAttribute="trailing" secondItem="z7Y-0m-lNb" secondAttribute="trailing" id="MeG-rs-wdo"/>
+                            <constraint firstItem="Fue-LT-uun" firstAttribute="centerY" secondItem="z7Y-0m-lNb" secondAttribute="centerY" id="WFj-Sb-tWG"/>
+                            <constraint firstItem="TrH-MC-bBI" firstAttribute="top" secondItem="UVA-YR-kYC" secondAttribute="top" id="ZrG-Q9-vCf"/>
+                            <constraint firstItem="Fue-LT-uun" firstAttribute="centerX" secondItem="z7Y-0m-lNb" secondAttribute="centerX" id="afP-0b-aDT"/>
+                            <constraint firstAttribute="bottom" secondItem="TrH-MC-bBI" secondAttribute="bottom" id="kHq-Bg-5eC"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="z7Y-0m-lNb"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Blocked Users" id="Xyi-EU-vgM"/>
+                    <connections>
+                        <outlet property="notificationLbl" destination="Fue-LT-uun" id="TFg-YZ-N1c"/>
+                        <outlet property="tableView" destination="TrH-MC-bBI" id="eZp-dU-HFG"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="eRw-nb-ydx" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3144.8000000000002" y="1067.3163418290856"/>
         </scene>
         <!--Settings-->
         <scene sceneID="idb-m2-qWd">
