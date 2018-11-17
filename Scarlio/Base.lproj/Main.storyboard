@@ -1010,6 +1010,94 @@
             </objects>
             <point key="canvasLocation" x="4684" y="394"/>
         </scene>
+        <!--Contacts TableVC-->
+        <scene sceneID="Wt7-mY-O6Q">
+            <objects>
+                <tableViewController storyboardIdentifier="contactsTableVC" id="sNl-58-fQX" customClass="ContactsTableVC" customModule="Scarlio" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="80" estimatedRowHeight="80" sectionHeaderHeight="28" sectionFooterHeight="28" id="Pik-tv-Y6y">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="userCell" rowHeight="80" id="epn-XL-Z2Y" customClass="UserTableViewCell" customModule="Scarlio" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="375" height="80"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="epn-XL-Z2Y" id="FZx-gD-IO1">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="79.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="FULLNAME" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MiW-Un-IvJ">
+                                            <rect key="frame" x="84" y="29.5" width="275" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="avatarPlaceholder" translatesAutoresizingMaskIntoConstraints="NO" id="XDj-OQ-egr">
+                                            <rect key="frame" x="16" y="10" width="60" height="60"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="60" id="F71-Wm-jN5"/>
+                                                <constraint firstAttribute="width" constant="60" id="wcP-Rn-e1t"/>
+                                            </constraints>
+                                        </imageView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="MiW-Un-IvJ" firstAttribute="leading" secondItem="XDj-OQ-egr" secondAttribute="trailing" constant="8" id="3fu-il-pdi"/>
+                                        <constraint firstItem="MiW-Un-IvJ" firstAttribute="trailing" secondItem="FZx-gD-IO1" secondAttribute="trailingMargin" id="Kym-rF-vgJ"/>
+                                        <constraint firstItem="MiW-Un-IvJ" firstAttribute="centerY" secondItem="FZx-gD-IO1" secondAttribute="centerY" id="aWa-S6-hE9"/>
+                                        <constraint firstItem="XDj-OQ-egr" firstAttribute="centerY" secondItem="FZx-gD-IO1" secondAttribute="centerY" id="pSb-fT-IYw"/>
+                                        <constraint firstItem="XDj-OQ-egr" firstAttribute="leading" secondItem="FZx-gD-IO1" secondAttribute="leading" constant="16" id="ylu-UM-fGA"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="fullNameLbl" destination="MiW-Un-IvJ" id="8XS-yT-rPK"/>
+                                    <outlet property="userImg" destination="XDj-OQ-egr" id="q9q-Rz-0xk"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="sNl-58-fQX" id="tnW-Mg-Ser"/>
+                            <outlet property="delegate" destination="sNl-58-fQX" id="JLn-aw-UOx"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7UB-bO-ICp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="userCell" id="jqw-Xu-RfO" customClass="UserTableViewCell" customModule="Scarlio" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="80"/>
+                    <autoresizingMask key="autoresizingMask"/>
+                    <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="jqw-Xu-RfO" id="OCp-FM-X9x">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="79.5"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="FULLNAME" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IOC-bg-DEf">
+                                <rect key="frame" x="84" y="29.5" width="275" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="avatarPlaceholder" translatesAutoresizingMaskIntoConstraints="NO" id="9zx-fB-QNB">
+                                <rect key="frame" x="16" y="10" width="60" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="60" id="Hhx-uD-o8m"/>
+                                    <constraint firstAttribute="width" constant="60" id="fQe-ho-cf2"/>
+                                </constraints>
+                            </imageView>
+                        </subviews>
+                        <constraints>
+                            <constraint firstItem="IOC-bg-DEf" firstAttribute="trailing" secondItem="OCp-FM-X9x" secondAttribute="trailingMargin" id="30V-1e-Jpr"/>
+                            <constraint firstItem="9zx-fB-QNB" firstAttribute="centerY" secondItem="OCp-FM-X9x" secondAttribute="centerY" id="36j-Ee-spU"/>
+                            <constraint firstItem="9zx-fB-QNB" firstAttribute="leading" secondItem="OCp-FM-X9x" secondAttribute="leading" constant="16" id="Epb-ed-rb0"/>
+                            <constraint firstItem="IOC-bg-DEf" firstAttribute="centerY" secondItem="OCp-FM-X9x" secondAttribute="centerY" id="VVG-69-Q43"/>
+                            <constraint firstItem="IOC-bg-DEf" firstAttribute="leading" secondItem="9zx-fB-QNB" secondAttribute="trailing" constant="8" id="xSn-g4-W7l"/>
+                        </constraints>
+                    </tableViewCellContentView>
+                    <connections>
+                        <outlet property="fullNameLbl" destination="IOC-bg-DEf" id="dba-bf-YLE"/>
+                        <outlet property="userImg" destination="9zx-fB-QNB" id="7wU-Nr-1tR"/>
+                    </connections>
+                </tableViewCell>
+            </objects>
+            <point key="canvasLocation" x="5437.6000000000004" y="393.55322338830587"/>
+        </scene>
         <!--Select Background-->
         <scene sceneID="sLH-Us-Ili">
             <objects>
@@ -1202,7 +1290,7 @@
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="FOd-y4-kWO">
                                 <rect key="frame" x="16" y="72" width="343" height="595"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <mutableString key="text">1. TERMS OF USE
+                                <string key="text">1. TERMS OF USE
 By downloading, browsing, accessing or using this Sample Store mobile application (“Mobile Application”), you agree to be bound by these Terms and Conditions of Use. We reserve the right to amend these terms and conditions at any time. If you disagree with any of these Terms and Conditions of Use, you must immediately discontinue your access to the Mobile Application and your use of the services offered on the Mobile Application. Continued use of the Mobile Application will constitute acceptance of these Terms and Conditions of Use, as may be amended from time to time.
 2. DEFINITIONS
 In these Terms and Conditions of Use, the following capitalised terms shall have the following meanings, except where the context otherwise requires:
@@ -1264,7 +1352,7 @@ In these Terms and Conditions of Use, the following capitalised terms shall have
 7.2 We do not warrant that your use of the Services or the Mobile Application will be uninterrupted and we do not warrant that any information (or messages) transmitted via the Services or the Mobile Application will be transmitted accurately, reliably, in a timely manner or at all. Notwithstanding that we will try to allow uninterrupted access to the Services and the Mobile Application, access to the Services and the Mobile Application may be suspended, restricted or terminated at any time.
 7.3 We do not give any warranty that the Services and the Mobile Application are free from viruses or anything else which may have a harmful effect on any technology.
 7.4 We reserve the right to change, modify, substitute, suspend or remove without notice any information or Services on the Mobile Application from time to time. Your access to the Mobile Application and/or the Services may also be occasionally restricted to allow for repairs, maintenance or the introduction of new facilities or services. We will attempt to restore such access as soon as we reasonably can. For the avoidance of doubt, we reserve the right to withdraw any information or Services from the Mobile Application at any time.
-7.5 We reserve the right to block access to and/or to edit or remove any material which in our reasonable opinion may give rise to a breach of these Terms and Conditions of Use.</mutableString>
+7.5 We reserve the right to block access to and/or to edit or remove any material which in our reasonable opinion may give rise to a breach of these Terms and Conditions of Use.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>

@@ -54,6 +54,6 @@
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Scarlio needs your location</string>
 	<key>NSContactsUsageDescription</key>
-	<string>Scarlio needs to access your Contacts</string>
+	<string>Scarlio needs your Contacts</string>
 </dict>
 </plist>

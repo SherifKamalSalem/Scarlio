@@ -45,8 +45,11 @@ class ChatsVC: UIViewController {
 
     //MARK: IBActions
     @IBAction func createChatBtnPressed(_ sender: Any) {
-        let userVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "userTableVC") as? UserTableVC
-        self.navigationController?.pushViewController(userVC!, animated: true)
+        selectUserForChat(isGroup: false)
+    }
+    
+    @objc func groupButtonPressed() {
+        selectUserForChat(isGroup: true)
     }
     
     //MARK: load recent chats
@@ -101,6 +104,13 @@ class ChatsVC: UIViewController {
     }
     
     //MARK: Helper Functions
+    
+    func selectUserForChat(isGroup: Bool) {
+        let contactsVC = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "contactsTableVC") as? ContactsTableVC
+        contactsVC?.isGroup = isGroup
+        self.navigationController?.pushViewController(contactsVC!, animated: true)
+    }
+    
     func updatePushMembers(recent: NSDictionary, isMute: Bool) {
         var membersToPush = recent[kMEMBERSTOPUSH] as! [String]
         if isMute {
@@ -111,10 +121,6 @@ class ChatsVC: UIViewController {
         }
         //save to firebase
         updateExistingRecent(withValues: [kMEMBERSTOPUSH : membersToPush], chatRoomId: recent[kCHATROOMID] as! String, members: recent[kMEMBERS] as! [String])
-    }
-    
-    @objc func groupButtonPressed() {
-        
     }
 }
 
