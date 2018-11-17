@@ -432,7 +432,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QL1-hz-HRD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3945" y="-306"/>
+            <point key="canvasLocation" x="3900" y="-306"/>
         </scene>
         <!--Chat PageVC-->
         <scene sceneID="C4g-R6-aM3">
@@ -526,7 +526,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9Gm-em-iDw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6218.3999999999996" y="-312.59370314842579"/>
+            <point key="canvasLocation" x="6215" y="-305"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="P3f-g7-KxP">
@@ -634,6 +634,9 @@
                                                     <rect key="frame" x="16" y="6" width="309" height="32"/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
                                                     <state key="normal" title="Chat Background"/>
+                                                    <connections>
+                                                        <segue destination="H5M-qc-NJY" kind="push" id="nEO-eT-Yck"/>
+                                                    </connections>
                                                 </button>
                                             </subviews>
                                             <constraints>
@@ -996,7 +999,56 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ola-IR-5i0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3944.8000000000002" y="393.55322338830587"/>
+            <point key="canvasLocation" x="4684" y="394"/>
+        </scene>
+        <!--Select Background-->
+        <scene sceneID="sLH-Us-Ili">
+            <objects>
+                <collectionViewController hidesBottomBarWhenPushed="YES" id="H5M-qc-NJY" customClass="BackgroundCollectionVC" customModule="Scarlio" customModuleProvider="target" sceneMemberID="viewController">
+                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="21k-NC-kbd">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="OmL-ak-Oh3">
+                            <size key="itemSize" width="107" height="190"/>
+                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                            <inset key="sectionInset" minX="10" minY="10" maxX="10" maxY="10"/>
+                        </collectionViewFlowLayout>
+                        <cells>
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="backgroundCollectionCell" id="ved-su-gky" customClass="BackgroundCollectionCell" customModule="Scarlio" customModuleProvider="target">
+                                <rect key="frame" x="10" y="10" width="107" height="190"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                    <rect key="frame" x="0.0" y="0.0" width="107" height="190"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="CqV-Av-CTq">
+                                            <rect key="frame" x="0.0" y="0.0" width="107" height="190"/>
+                                        </imageView>
+                                    </subviews>
+                                </view>
+                                <constraints>
+                                    <constraint firstItem="CqV-Av-CTq" firstAttribute="leading" secondItem="ved-su-gky" secondAttribute="leading" id="5TF-lR-mla"/>
+                                    <constraint firstItem="CqV-Av-CTq" firstAttribute="top" secondItem="ved-su-gky" secondAttribute="top" id="gvs-sz-bad"/>
+                                    <constraint firstAttribute="bottom" secondItem="CqV-Av-CTq" secondAttribute="bottom" id="nmA-sZ-Jgt"/>
+                                    <constraint firstAttribute="trailing" secondItem="CqV-Av-CTq" secondAttribute="trailing" id="o8W-c0-hKq"/>
+                                </constraints>
+                                <connections>
+                                    <outlet property="backgroundImg" destination="CqV-Av-CTq" id="ard-1D-6zi"/>
+                                </connections>
+                            </collectionViewCell>
+                        </cells>
+                        <connections>
+                            <outlet property="dataSource" destination="H5M-qc-NJY" id="5mB-Vm-Sho"/>
+                            <outlet property="delegate" destination="H5M-qc-NJY" id="EQL-Gc-7T2"/>
+                        </connections>
+                    </collectionView>
+                    <navigationItem key="navigationItem" title="Select Background" id="2vg-Oy-deC"/>
+                </collectionViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ciX-Nd-goo" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3900" y="1076.311844077961"/>
         </scene>
         <!--Blocked Users-->
         <scene sceneID="nXn-B9-YsA">
@@ -1057,7 +1109,7 @@
                         <constraints>
                             <constraint firstItem="TrH-MC-bBI" firstAttribute="leading" secondItem="z7Y-0m-lNb" secondAttribute="leading" id="5BO-Qu-tMt"/>
                             <constraint firstItem="Fue-LT-uun" firstAttribute="leading" secondItem="z7Y-0m-lNb" secondAttribute="leading" constant="16" id="B14-OP-dtN"/>
-                            <constraint firstItem="z7Y-0m-lNb" firstAttribute="trailing" secondItem="Fue-LT-uun" secondAttribute="trailing" constant="16" id="JCr-c6-2Dm"/>
+                            <constraint firstItem="z7Y-0m-lNb" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Fue-LT-uun" secondAttribute="trailing" id="JCr-c6-2Dm"/>
                             <constraint firstItem="TrH-MC-bBI" firstAttribute="trailing" secondItem="z7Y-0m-lNb" secondAttribute="trailing" id="MeG-rs-wdo"/>
                             <constraint firstItem="Fue-LT-uun" firstAttribute="centerY" secondItem="z7Y-0m-lNb" secondAttribute="centerY" id="WFj-Sb-tWG"/>
                             <constraint firstItem="TrH-MC-bBI" firstAttribute="top" secondItem="UVA-YR-kYC" secondAttribute="top" id="ZrG-Q9-vCf"/>
@@ -1074,7 +1126,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="eRw-nb-ydx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3144.8000000000002" y="1067.3163418290856"/>
+            <point key="canvasLocation" x="3900" y="394"/>
         </scene>
         <!--Settings-->
         <scene sceneID="idb-m2-qWd">
