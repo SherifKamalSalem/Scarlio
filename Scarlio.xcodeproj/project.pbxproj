@@ -11,6 +11,7 @@
 		42235352219F961F00966382 /* BackgroundCollectionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42235351219F961F00966382 /* BackgroundCollectionVC.swift */; };
 		42235354219F965E00966382 /* BackgroundCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42235353219F965E00966382 /* BackgroundCollectionCell.swift */; };
 		42235356219FA4CB00966382 /* TermsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42235355219FA4CB00966382 /* TermsVC.swift */; };
+		42235358219FA91C00966382 /* EditProfileTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42235357219FA91C00966382 /* EditProfileTableVC.swift */; };
 		4233C0B6219B783000E872CB /* ChatPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4233C0B5219B783000E872CB /* ChatPageVC.swift */; };
 		4241A888219A539500399017 /* Recent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4241A887219A539500399017 /* Recent.swift */; };
 		42431FEC219A824000E7DDCC /* RecentChatsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42431FEB219A824000E7DDCC /* RecentChatsCell.swift */; };
@@ -49,6 +50,7 @@
 		42235351219F961F00966382 /* BackgroundCollectionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundCollectionVC.swift; sourceTree = "<group>"; };
 		42235353219F965E00966382 /* BackgroundCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundCollectionCell.swift; sourceTree = "<group>"; };
 		42235355219FA4CB00966382 /* TermsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsVC.swift; sourceTree = "<group>"; };
+		42235357219FA91C00966382 /* EditProfileTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileTableVC.swift; sourceTree = "<group>"; };
 		4233C0B5219B783000E872CB /* ChatPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatPageVC.swift; sourceTree = "<group>"; };
 		4241A887219A539500399017 /* Recent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recent.swift; sourceTree = "<group>"; };
 		42431FEB219A824000E7DDCC /* RecentChatsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentChatsCell.swift; sourceTree = "<group>"; };
@@ -162,6 +164,7 @@
 				42235351219F961F00966382 /* BackgroundCollectionVC.swift */,
 				42235353219F965E00966382 /* BackgroundCollectionCell.swift */,
 				42235355219FA4CB00966382 /* TermsVC.swift */,
+				42235357219FA91C00966382 /* EditProfileTableVC.swift */,
 			);
 			path = Scarlio;
 			sourceTree = "<group>";
@@ -370,6 +373,7 @@
 				424F60C1219BA3E1000AC359 /* OutGoingMessages.swift in Sources */,
 				42B596B32193253C00435D73 /* Group.swift in Sources */,
 				4241A888219A539500399017 /* Recent.swift in Sources */,
+				42235358219FA91C00966382 /* EditProfileTableVC.swift in Sources */,
 				425B778F219E374F00D5C025 /* AudioMessage.swift in Sources */,
 				42B596BF2193253C00435D73 /* FUser.swift in Sources */,
 				424F60C3219BBB4B000AC359 /* IncomingMessages.swift in Sources */,
