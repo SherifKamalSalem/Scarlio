@@ -10,6 +10,7 @@
 		421ACFEC2199EE520066BE1D /* ProfileTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421ACFEB2199EE520066BE1D /* ProfileTableVC.swift */; };
 		42235352219F961F00966382 /* BackgroundCollectionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42235351219F961F00966382 /* BackgroundCollectionVC.swift */; };
 		42235354219F965E00966382 /* BackgroundCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42235353219F965E00966382 /* BackgroundCollectionCell.swift */; };
+		42235356219FA4CB00966382 /* TermsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42235355219FA4CB00966382 /* TermsVC.swift */; };
 		4233C0B6219B783000E872CB /* ChatPageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4233C0B5219B783000E872CB /* ChatPageVC.swift */; };
 		4241A888219A539500399017 /* Recent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4241A887219A539500399017 /* Recent.swift */; };
 		42431FEC219A824000E7DDCC /* RecentChatsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42431FEB219A824000E7DDCC /* RecentChatsCell.swift */; };
@@ -47,6 +48,7 @@
 		421ACFEB2199EE520066BE1D /* ProfileTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTableVC.swift; sourceTree = "<group>"; };
 		42235351219F961F00966382 /* BackgroundCollectionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundCollectionVC.swift; sourceTree = "<group>"; };
 		42235353219F965E00966382 /* BackgroundCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundCollectionCell.swift; sourceTree = "<group>"; };
+		42235355219FA4CB00966382 /* TermsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsVC.swift; sourceTree = "<group>"; };
 		4233C0B5219B783000E872CB /* ChatPageVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatPageVC.swift; sourceTree = "<group>"; };
 		4241A887219A539500399017 /* Recent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recent.swift; sourceTree = "<group>"; };
 		42431FEB219A824000E7DDCC /* RecentChatsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentChatsCell.swift; sourceTree = "<group>"; };
@@ -159,6 +161,7 @@
 				42AEC124219F7E70006B0CF6 /* BlockedUsersVC.swift */,
 				42235351219F961F00966382 /* BackgroundCollectionVC.swift */,
 				42235353219F965E00966382 /* BackgroundCollectionCell.swift */,
+				42235355219FA4CB00966382 /* TermsVC.swift */,
 			);
 			path = Scarlio;
 			sourceTree = "<group>";
@@ -349,6 +352,7 @@
 				42DFE01B21936013004FF74E /* HelperFunctions.swift in Sources */,
 				42BE22C12198F74A0075E481 /* UserTableViewCell.swift in Sources */,
 				42839A5F219633870013B8BA /* FinishRegisterationVC.swift in Sources */,
+				42235356219FA4CB00966382 /* TermsVC.swift in Sources */,
 				42BE22C321990A4D0075E481 /* UserTableVC.swift in Sources */,
 				42431FEC219A824000E7DDCC /* RecentChatsCell.swift in Sources */,
 				42B596CD2193291000435D73 /* Constants.swift in Sources */,
