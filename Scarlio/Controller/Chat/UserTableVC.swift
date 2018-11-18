@@ -111,7 +111,9 @@ class UserTableVC: UITableViewController {
             if firstCharString != sectionTitle {
                 sectionTitle = firstCharString
                 self.allUserGrouped[sectionTitle] = []
-                self.sectionTitleList.append(sectionTitle)
+                if !sectionTitleList.contains(sectionTitle) {
+                    self.sectionTitleList.append(sectionTitle)
+                }
             }
             self.allUserGrouped[firstCharString]?.append(currentUser)
         }

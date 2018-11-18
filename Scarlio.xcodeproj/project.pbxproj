@@ -21,6 +21,8 @@
 		424F60C3219BBB4B000AC359 /* IncomingMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 424F60C2219BBB4B000AC359 /* IncomingMessages.swift */; };
 		425678CE219E8E64007B7A16 /* PictureCollectionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425678CD219E8E64007B7A16 /* PictureCollectionVC.swift */; };
 		425678D0219E8EC9007B7A16 /* PictureCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425678CF219E8EC9007B7A16 /* PictureCell.swift */; };
+		42578E0921A0BB31004A6C83 /* GroupMemberCVCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42578E0821A0BB31004A6C83 /* GroupMemberCVCell.swift */; };
+		42578E0B21A0BDFD004A6C83 /* NewGroupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42578E0A21A0BDFD004A6C83 /* NewGroupVC.swift */; };
 		42582F872192A2B600F494CB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42582F862192A2B600F494CB /* AppDelegate.swift */; };
 		42582F8C2192A2B600F494CB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 42582F8A2192A2B600F494CB /* Main.storyboard */; };
 		42582F8E2192A2B800F494CB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42582F8D2192A2B800F494CB /* Assets.xcassets */; };
@@ -62,6 +64,8 @@
 		424F60C2219BBB4B000AC359 /* IncomingMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IncomingMessages.swift; sourceTree = "<group>"; };
 		425678CD219E8E64007B7A16 /* PictureCollectionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureCollectionVC.swift; sourceTree = "<group>"; };
 		425678CF219E8EC9007B7A16 /* PictureCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureCell.swift; sourceTree = "<group>"; };
+		42578E0821A0BB31004A6C83 /* GroupMemberCVCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupMemberCVCell.swift; sourceTree = "<group>"; };
+		42578E0A21A0BDFD004A6C83 /* NewGroupVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NewGroupVC.swift; path = Scarlio/Controller/NewGroupVC.swift; sourceTree = SOURCE_ROOT; };
 		42582F832192A2B600F494CB /* Scarlio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Scarlio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42582F862192A2B600F494CB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		42582F8B2192A2B600F494CB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -121,6 +125,7 @@
 				4223535D219FC61400966382 /* Profile */,
 				4223535F219FC66F00966382 /* Auth */,
 				42235360219FC6ED00966382 /* ContactsTableVC.swift */,
+				42578E0A21A0BDFD004A6C83 /* NewGroupVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -133,6 +138,7 @@
 				4287E6B8219D0D30002F64B1 /* PhotoMediaItem.swift */,
 				425678CF219E8EC9007B7A16 /* PictureCell.swift */,
 				42235353219F965E00966382 /* BackgroundCollectionCell.swift */,
+				42578E0821A0BB31004A6C83 /* GroupMemberCVCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -419,6 +425,7 @@
 				42839A5F219633870013B8BA /* FinishRegisterationVC.swift in Sources */,
 				42235356219FA4CB00966382 /* TermsVC.swift in Sources */,
 				42BE22C321990A4D0075E481 /* UserTableVC.swift in Sources */,
+				42578E0921A0BB31004A6C83 /* GroupMemberCVCell.swift in Sources */,
 				42431FEC219A824000E7DDCC /* RecentChatsCell.swift in Sources */,
 				42235363219FD32700966382 /* CountryCode.swift in Sources */,
 				42B596CD2193291000435D73 /* Constants.swift in Sources */,
@@ -433,6 +440,7 @@
 				42AEC125219F7E70006B0CF6 /* BlockedUsersVC.swift in Sources */,
 				4287E6B5219CDAA9002F64B1 /* Camera.swift in Sources */,
 				42235354219F965E00966382 /* BackgroundCollectionCell.swift in Sources */,
+				42578E0B21A0BDFD004A6C83 /* NewGroupVC.swift in Sources */,
 				42BE22BF2198ED760075E481 /* SettingsTableVC.swift in Sources */,
 				424F60C1219BA3E1000AC359 /* OutGoingMessages.swift in Sources */,
 				42B596B32193253C00435D73 /* Group.swift in Sources */,

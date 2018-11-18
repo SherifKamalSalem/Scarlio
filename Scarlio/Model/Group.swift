@@ -1,9 +1,9 @@
 //
 //  Group.swift
-//  iChat
+//  Scarlio
 //
-//  Created by David Kababyan on 07/07/2018.
-//  Copyright © 2018 David Kababyan. All rights reserved.
+//  Created by Sherif Kamal on 07/11/2018.
+//  Copyright © 2018 Sherif Kamal. All rights reserved.
 //
 
 import Foundation
@@ -22,12 +22,10 @@ class Group {
         
         let date = dateFormatter().string(from: Date())
         groupDictionary[kDATE] = date
-        reference(.Group).document(groupDictionary[kGROUPID] as! String).setData(groupDictionary as! [String:Any])
+        reference(.Group).document(groupDictionary[kGROUPID] as! String).setData(groupDictionary as! [String : Any])
     }
     
     class func updateGroup(groupId: String, withValues: [String:Any]) {
         reference(.Group).document(groupId).updateData(withValues)
     }
-    
-    
 }

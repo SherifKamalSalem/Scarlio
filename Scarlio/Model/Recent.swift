@@ -26,6 +26,10 @@ func startPrivateChat(firstUser: FUser, secondUser: FUser) -> String {
     return chatRoomId
 }
 
+/**
+ Create recent for every member of group
+ including new member that can participat into chat
+ */
 func createRecent(forMembers members: [String], chatRoomId: String, withUser userName: String, ofType type: String, forUsers users: [FUser]?, avatarOfGroup: String?) {
     
     var tempMembers = members
@@ -70,7 +74,7 @@ func createRecentItem(userId: String, chatRoomId: String, members: [String], wit
                   kCHATROOMID : chatRoomId,
                   kMEMBERS : members,
                   kMEMBERSTOPUSH : members,
-                  kWITHUSERFULLNAME : recentChatUser?.fullname,
+                  kWITHUSERFULLNAME : recentChatUser?.fullname ?? "someone",
                   kWITHUSERUSERID : recentChatUser?.objectId,
                   kLASTMESSAGE : "",
                   kCOUNTER : 0,
@@ -84,7 +88,7 @@ func createRecentItem(userId: String, chatRoomId: String, members: [String], wit
                       kCHATROOMID : chatRoomId,
                       kMEMBERS : members,
                       kMEMBERSTOPUSH : members,
-                      kWITHUSERFULLNAME : recentChatUser!.fullname,
+                      kWITHUSERFULLNAME : recentChatUser?.fullname ?? "User",
                       kLASTMESSAGE : "",
                       kCOUNTER : 0,
                       kDATE : date,
@@ -103,9 +107,9 @@ func restartChat(recent: NSDictionary) {
         createRecent(forMembers: recent[kMEMBERSTOPUSH] as! [String], chatRoomId: recent[kCHATROOMID] as! String, withUser: (FUser.currentUser()?.firstname)!, ofType: kPRIVATE, forUsers: [FUser.currentUser()!], avatarOfGroup: nil)
     }
     if recent[kTYPE] as! String == kGROUP {
-        createRecent(forMembers: recent[kMEMBERS] as! [String], chatRoomId: recent[kCHATROOMID] as! String, withUser: recent[kWITHUSERFULLNAME] as! String, ofType: kGROUP, forUsers: nil, avatarOfGroup: recent[kAVATAR] as? String)
+        print(".............\(recent[kNAME])")
+        createRecent(forMembers: recent[kMEMBERSTOPUSH] as! [String], chatRoomId: recent[kCHATROOMID] as! String, withUser: recent[kWITHUSERFULLNAME] as! String, ofType: kGROUP, forUsers: nil, avatarOfGroup: recent[kAVATAR] as? String)
     }
-    
 }
 
 //MARK: Clear Counter
@@ -204,4 +208,12 @@ func deleteRecentsFor(chatRoomId: String) {
             }
         }
     }
+}
+
+//MARK: Group Recent Functions
+
+func startGroupChat(group: Group) {
+    let chatRoomId = group.groupDictionary[kGROUPID] as! String
+    let members = group.groupDictionary[kMEMBERS] as! [String]
+    createRecent(forMembers: members, chatRoomId: chatRoomId, withUser: group.groupDictionary[kNAME] as! String, ofType: kGROUP, forUsers: nil, avatarOfGroup: group.groupDictionary[kAVATAR] as? String)
 }

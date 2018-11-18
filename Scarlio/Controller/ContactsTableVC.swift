@@ -29,10 +29,6 @@ class ContactsTableVC: UITableViewController {
     let searchController = UISearchController(searchResultsController: nil)
     
     lazy var contacts: [CNContact] = {
-        requestForAccess(completionHandler: { (isAuth) in
-            print("status \(isAuth)")
-        })
-        
         //get your contacts and put them in array
         let contactStore = CNContactStore()
         let keysToFetch = [
@@ -252,35 +248,6 @@ class ContactsTableVC: UITableViewController {
         }
     }
     
-    func requestForAccess(completionHandler: (_ accessGranted: Bool) -> Void) {
-        let authorizationStatus = CNContactStore.authorizationStatus(for: CNEntityType.contacts)
-        
-        switch authorizationStatus {
-        case .authorized:
-            completionHandler(true)
-            
-        case .denied, .notDetermined:
-//            self.contacts.Storage.requestAccessForEntityType(CNEntityType.Contacts, completionHandler: { (access, accessError) -> Void in
-//                if access {
-//                    completionHandler(accessGranted: access)
-//                }
-//                else {
-//                    if authorizationStatus == CNAuthorizationStatus.Denied {
-//                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                            let message = "\(accessError!.localizedDescription)\n\nPlease allow the app to access your contacts through the Settings."
-//                            self.showMessage(message)
-//                        })
-//                    }
-//                }
-//            })
-            print("denied")
-            
-        default:
-            completionHandler(false)
-        }
-    }
-    
-    
     func removeCountryCode(countryCodeLetters: String, fullPhoneNumber: String) -> String {
         
         let countryCode = CountryCode()
@@ -316,7 +283,9 @@ class ContactsTableVC: UITableViewController {
                 // add new section having key as section title and value as empty array of string
                 self.allUsersGrouped[sectionTitle] = []
                 // append title within section title list
-                self.sectionTitleList.append(sectionTitle)
+                if !sectionTitleList.contains(sectionTitle) {
+                    self.sectionTitleList.append(sectionTitle)
+                }
             }
             // add record to the section
             self.allUsersGrouped[firstCharString]?.append(currentUser)
@@ -380,7 +349,10 @@ class ContactsTableVC: UITableViewController {
     //MARK: IBActions
     
     @objc func nextBtnPressed() {
-        
+        let newGroupVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "newGroupVC") as! NewGroupVC
+        newGroupVC.memberIds = memberIdsOfGroupChat
+        newGroupVC.allMembers = membersOfGroupChat
+        self.navigationController?.pushViewController(newGroupVC, animated: true)
     }
     
     @objc func inviteBtnPressed() {
