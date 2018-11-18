@@ -93,7 +93,20 @@ class EditGroupVC: UIViewController {
     }
     
     @IBAction func saveBtnPressed(_ sender: Any) {
-        
+        var withValues : [String : Any]!
+        if groupSubjectTxtField.text != "" {
+            withValues = [kNAME : groupSubjectTxtField.text!]
+            
+        } else {
+            ProgressHUD.showError("Subject is Required!")
+        }
+        let avatarData = cameraImageView.image?.jpegData(compressionQuality: 0.7)
+        let avatarSring = avatarData?.base64EncodedString(options: Data.Base64EncodingOptions(rawValue: 0))
+        withValues = [kNAME : groupSubjectTxtField.text!, kAVATAR : avatarSring!]
+        Group.updateGroup(groupId: group![kGROUPID] as! String, withValues: withValues)
+        withValues = [kWITHUSERFULLNAME : groupSubjectTxtField.text!, kAVATAR : avatarSring]
+        updateExistingRecent(withValues: withValues, chatRoomId: group![kGROUPID] as! String, members: group![kMEMBERS] as! [String])
+        self.navigationController?.popToRootViewController(animated: true)
     }
     
     @objc func inviteUsers() {

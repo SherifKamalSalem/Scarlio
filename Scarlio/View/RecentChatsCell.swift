@@ -36,8 +36,11 @@ class RecentChatsCell: UITableViewCell {
     //MARK: Configure Cell
     func generateCell(recentChat: NSDictionary, indexPath: IndexPath) {
         self.indexPath = indexPath
+        //Decryption
+        let decryptedText = Encryption.decryptText(chatRoomId: recentChat[kCHATROOMID] as! String, encryptedMessage: recentChat[kLASTMESSAGE] as! String)
+        
         self.nameLbl.text = recentChat[kWITHUSERFULLNAME] as? String
-        self.lastMsgLbl.text = recentChat[kLASTMESSAGE] as? String
+        self.lastMsgLbl.text = decryptedText
         self.msgCounterLbl.text = recentChat[kCOUNTER] as? String
         if let avatarStr = recentChat[kAVATAR] {
             imageFromData(pictureData: avatarStr as! String) { (avatarImg) in

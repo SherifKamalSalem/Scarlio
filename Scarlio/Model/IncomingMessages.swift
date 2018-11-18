@@ -57,10 +57,10 @@ class IncomingMessages {
         } else {
             date = Date()
         }
+        //Decryption
+        let decryptedText = Encryption.decryptText(chatRoomId: chatRoomId, encryptedMessage: messages[kMESSAGE] as! String)
         
-        let text = messages[kMESSAGE] as! String
-        
-        return JSQMessage(senderId: userId, senderDisplayName: name, date: date, text: text)
+        return JSQMessage(senderId: userId, senderDisplayName: name, date: date, text: decryptedText)
     }
     
     //MARK: creating picture msg

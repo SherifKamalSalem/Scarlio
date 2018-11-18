@@ -17,7 +17,7 @@ import FirebaseFirestore
 
 class ChatPageVC: JSQMessagesViewController {
 
-    //MARK: Variables
+    //MARK: - Variables
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     var chatRoomId: String!
@@ -97,6 +97,7 @@ class ChatPageVC: JSQMessagesViewController {
         super.viewDidLoad()
         //notify the other user if current is typing
         createTypingObserver()
+        loadUserDefaults()
         //deleting message
         JSQMessagesCollectionViewCell.registerMenuAction(#selector(delete))
         navigationItem.largeTitleDisplayMode = .never
@@ -104,7 +105,6 @@ class ChatPageVC: JSQMessagesViewController {
         //get current group
         if isGroup! {
             getCurrentGroup(withId: chatRoomId)
-            print("..............title\(titleName)")
         }
         
         collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize.zero
@@ -125,7 +125,7 @@ class ChatPageVC: JSQMessagesViewController {
         self.inputToolbar.contentView.rightBarButtonItem.setTitle("", for: .normal)
     }
     
-    //MARK: JSQMessages data source functions
+    //MARK: - JSQMessages data source functions
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = super.collectionView(collectionView, cellForItemAt: indexPath) as! JSQMessagesCollectionViewCell
         let data = messages[indexPath.row]
@@ -212,7 +212,7 @@ class ChatPageVC: JSQMessagesViewController {
         return avatar
     }
     
-    //MARK: JSQMessages delegate functions
+    //MARK: - JSQMessages delegate functions
     override func didPressAccessoryButton(_ sender: UIButton!) {
         let camera = Camera(delegate_: self)
         let optionMenu = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
@@ -365,21 +365,22 @@ class ChatPageVC: JSQMessagesViewController {
         
     }
     
-    //MARK: Helper Functions
-    //MARK: Send Message
+    //MARK: - Helper Functions
+    //MARK: - Send Message
     func sendMessage(text: String?, date: Date, picture: UIImage?, location: String?, video: NSURL?, audio: String?) {
         var outgoingMessage: OutGoingMessages?
         let currentUser = FUser.currentUser()
         //text msgs
         if let text = text {
-            outgoingMessage = OutGoingMessages(message: text, senderId: currentUser!.objectId, senderName: currentUser!.firstname, date: date, status: kDELIVERED, type: kTEXT)
+            let encyptedText = Encryption.encryptText(chatRoomId: chatRoomId, message: text)
+            outgoingMessage = OutGoingMessages(message: encyptedText, senderId: currentUser!.objectId, senderName: currentUser!.firstname, date: date, status: kDELIVERED, type: kTEXT)
         }
         //Picture msgs
         if let pic = picture {
             uploadImage(image: pic, chatRoomId: chatRoomId, view: self.navigationController!.view) { (imageLink) in
                 if imageLink != nil {
-                    let text = "[\(kPICTURE)]"
-                    outgoingMessage = OutGoingMessages(message: text, pictureLink: imageLink!, senderId: currentUser!.objectId, senderName: currentUser!.firstname, date: date, status: kDELIVERED, type: kPICTURE)
+                    let encyptedText = Encryption.encryptText(chatRoomId: self.chatRoomId, message: "[\(kPICTURE)]")
+                    outgoingMessage = OutGoingMessages(message: encyptedText, pictureLink: imageLink!, senderId: currentUser!.objectId, senderName: currentUser!.firstname, date: date, status: kDELIVERED, type: kPICTURE)
                     JSQSystemSoundPlayer.jsq_playMessageSentSound()
                     self.finishSendingMessage()
                     outgoingMessage?.sendMessage(chatRoomID: self.chatRoomId, messages: outgoingMessage!.messagesDictionary, memberIds: self.memberIds, membersToPush: self.membersToPush)
@@ -393,8 +394,8 @@ class ChatPageVC: JSQMessagesViewController {
             let thumbnailData = videoThumbnail(video: video).jpegData(compressionQuality: 0.3)
             uploadVideo(video: videoData!, chatRoomId: chatRoomId, view: self.navigationController!.view) { (videoLink) in
                 if videoLink != nil {
-                    let text = "[\(kVIDEO)]"
-                    outgoingMessage = OutGoingMessages(message: text, video: videoLink!, thumbnail: thumbnailData! as NSData, senderId: currentUser!.objectId, senderName: currentUser!.firstname, date: Date(), status: kDELIVERED, type: kVIDEO)
+                    let encyptedText = Encryption.encryptText(chatRoomId: self.chatRoomId, message: "[\(kVIDEO)]")
+                    outgoingMessage = OutGoingMessages(message: encyptedText, video: videoLink!, thumbnail: thumbnailData! as NSData, senderId: currentUser!.objectId, senderName: currentUser!.firstname, date: Date(), status: kDELIVERED, type: kVIDEO)
                     JSQSystemSoundPlayer.jsq_playMessageSentSound()
                     self.finishSendingMessage()
                     
@@ -408,8 +409,8 @@ class ChatPageVC: JSQMessagesViewController {
         if let audioPath = audio {
             uploadAudio(audioPath: audioPath, chatRoomId: chatRoomId, view: (self.navigationController?.view)!) { (audioLink) in
                 if audioLink != nil {
-                    let text = "[\(kAUDIO)]"
-                    outgoingMessage = OutGoingMessages(message: text, audio: audioLink!, senderId: currentUser!.objectId, senderName: currentUser!.firstname, date: date, status: kDELIVERED, type: kAUDIO)
+                    let encyptedText = Encryption.encryptText(chatRoomId: self.chatRoomId, message: "[\(kAUDIO)]")
+                    outgoingMessage = OutGoingMessages(message: encyptedText, audio: audioLink!, senderId: currentUser!.objectId, senderName: currentUser!.firstname, date: date, status: kDELIVERED, type: kAUDIO)
                     JSQSystemSoundPlayer.jsq_playMessageSentSound()
                     self.finishSendingMessage()
                     outgoingMessage?.sendMessage(chatRoomID: self.chatRoomId, messages: (outgoingMessage!.messagesDictionary), memberIds: self.memberIds, membersToPush: self.membersToPush)
@@ -417,13 +418,12 @@ class ChatPageVC: JSQMessagesViewController {
             }
             return
         }
-        //MARK: Send location msg
+        //MARK: - Send location msg
         if location != nil {
             let lat : NSNumber = NSNumber(value: appDelegate.coordinates?.latitude ?? 0.0)
             let lng : NSNumber = NSNumber(value: appDelegate.coordinates?.longitude ?? 0.0)
-            
-            let text = "[\(kLOCATION)]"
-            outgoingMessage = OutGoingMessages(message: text, latitude: lat, longitude: lng, senderId: currentUser!.objectId, senderName: currentUser!.firstname, date: date, status: kDELIVERED, type: kLOCATION)
+            let encyptedText = Encryption.encryptText(chatRoomId: self.chatRoomId, message: "[\(kLOCATION)]")
+            outgoingMessage = OutGoingMessages(message: encyptedText, latitude: lat, longitude: lng, senderId: currentUser!.objectId, senderName: currentUser!.firstname, date: date, status: kDELIVERED, type: kLOCATION)
         }
         
         //make a sound 🗣🖕💨 to notify user of new coming msgs
@@ -432,7 +432,7 @@ class ChatPageVC: JSQMessagesViewController {
         outgoingMessage!.sendMessage(chatRoomID: chatRoomId, messages: outgoingMessage!.messagesDictionary, memberIds: memberIds, membersToPush: membersToPush)
     }
     
-    //MARK: load all messages
+    //MARK: - load all messages
     func loadMessages() {
         //to update message status
         updatedChatListener = reference(.Message).document(FUser.currentId()).collection(chatRoomId).addSnapshotListener({ (snapshot, error) in
@@ -469,7 +469,30 @@ class ChatPageVC: JSQMessagesViewController {
         }
     }
     
-    //MARK: update message
+    //MARK: - Loading User Defaults
+    func loadUserDefaults() {
+        firstLoad = userDefaults.bool(forKey: kFIRSTRUN)
+        if !firstLoad! {
+            userDefaults.set(true, forKey: kFIRSTRUN)
+            userDefaults.set(showAvatars, forKey: kSHOWAVATAR)
+            userDefaults.synchronize()
+        }
+        showAvatars = userDefaults.bool(forKey: kSHOWAVATAR)
+        checkForBackgroundImage()
+    }
+    
+    //MARK: - Change Chat background
+    func checkForBackgroundImage() {
+        if userDefaults.object(forKey: kBACKGROUNDIMAGE) != nil {
+            self.collectionView.backgroundColor = .clear
+            let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
+            imageView.image = UIImage(named: userDefaults.object(forKey: kBACKGROUNDIMAGE) as! String)!
+            imageView.contentMode = .scaleAspectFill
+            self.view.insertSubview(imageView, at: 0)
+        }
+    }
+    
+    //MARK: - update message
     func updateMessage(messageDictionary: NSDictionary) {
         for index in 0 ..< objectMessages.count {
             let temp = objectMessages[index]
@@ -480,7 +503,7 @@ class ChatPageVC: JSQMessagesViewController {
         }
     }
     
-    //MARK: load more old messages
+    //MARK: - load more old messages
     func loadMoreMessages(maxNumber: Int, minNumber: Int) {
         if loadOld {
             maxMessagesNumber = minNumber - 1
@@ -498,7 +521,7 @@ class ChatPageVC: JSQMessagesViewController {
         self.showLoadEarlierMessagesHeader = (loadedMessagesCount != loadedMessages.count)
     }
     
-    //MARK: inserting old loaded messages that requested after loading the first 11 msgs
+    //MARK: - inserting old loaded messages that requested after loading the first 11 msgs
     func insertNewMessage(messageDictionary: NSDictionary) {
         let incomingMessage = IncomingMessages(collectionView_: self.collectionView!)
         let message = incomingMessage.createMessage(messages: messageDictionary, chatRoomId: chatRoomId)
@@ -506,7 +529,7 @@ class ChatPageVC: JSQMessagesViewController {
         messages.insert(message!, at: 0)
     }
     
-    //MARK: Insert messages
+    //MARK: - Insert messages
     func insertMessages() {
         maxMessagesNumber = loadedMessages.count - loadedMessagesCount
         minMessagesNumber = maxMessagesNumber - kNUMBEROFMESSAGES
@@ -521,7 +544,7 @@ class ChatPageVC: JSQMessagesViewController {
         self.showLoadEarlierMessagesHeader = (loadedMessagesCount != loadedMessages.count)
     }
     
-    //MARK: check if the message is on the right side or in the left side
+    //MARK: - check if the message is on the right side or in the left side
     func insertInitialLoadMessages(messageDictionary: NSDictionary) -> Bool {
         let incomingMessage = IncomingMessages(collectionView_: self.collectionView!)
         //incoming msgs
@@ -537,7 +560,7 @@ class ChatPageVC: JSQMessagesViewController {
         return isIncoming(messageDictionary: messageDictionary)
     }
     
-    //MARK: Update UI and Custom top header
+    //MARK: - Update UI and Custom top header
     func setCustomTitle() {
         leftBarButtonView.addSubview(avatarButton)
         leftBarButtonView.addSubview(titleLabel)
@@ -561,7 +584,7 @@ class ChatPageVC: JSQMessagesViewController {
         }
     }
     
-    //MARK: Get Avatars
+    //MARK: - Get Avatars
     func getAvatarImages() {
         if showAvatars {
             collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize(width: 30, height: 30)
@@ -594,7 +617,7 @@ class ChatPageVC: JSQMessagesViewController {
         }
     }
     
-    //MARK: create jsqavatar
+    //MARK: - create jsqavatar
     func createJSQAvatars(avatarDictionary: NSMutableDictionary?) {
         //creating default placeholder for user if having no avatar
         let defaultAvatar = JSQMessagesAvatarImageFactory.avatarImage(with: UIImage(named: "avatarPlaceholder"), diameter: 70)
@@ -615,7 +638,7 @@ class ChatPageVC: JSQMessagesViewController {
         }
     }
     
-    //MARK: set UI for single chat
+    //MARK: - set UI for single chat
     func setUIForSingleChat() {
         let withUser = withUsers.first!
         imageFromData(pictureData: withUser.avatar) { (image) in
@@ -632,7 +655,7 @@ class ChatPageVC: JSQMessagesViewController {
         avatarButton.addTarget(self, action: #selector(self.showUserProfile), for: .touchUpInside)
     }
     
-    //MARK: - set UI for Group chat
+    //MARK: - - set UI for Group chat
     func setUIForGroupChat() {
         imageFromData(pictureData: group![kAVATAR] as! String) { (image) in
             if image != nil {
@@ -644,7 +667,7 @@ class ChatPageVC: JSQMessagesViewController {
         subtitleLabel.text = ""
     }
     
-    //MARK: check if incoming or outgoing
+    //MARK: - check if incoming or outgoing
     func isIncoming(messageDictionary: NSDictionary) -> Bool {
         if FUser.currentId() == messageDictionary[kSENDERID] as! String {
             return false
@@ -653,7 +676,7 @@ class ChatPageVC: JSQMessagesViewController {
         }
     }
     
-    //MARK: listen for more than 11 chat msgs
+    //MARK: - listen for more than 11 chat msgs
     func listenForNewChats() {
         var lastMessageDate = "0"
         if loadedMessages.count > 0 {
@@ -682,7 +705,7 @@ class ChatPageVC: JSQMessagesViewController {
         })
     }
     
-    //MARK: loading old msgs in background
+    //MARK: - loading old msgs in background
     func getOldMessagesInBackground() {
         if loadedMessages.count > 10 {
             let firstMessageDate = loadedMessages.last![kDATE] as! String
@@ -696,7 +719,7 @@ class ChatPageVC: JSQMessagesViewController {
             }
         }
     }
-    //MARK: Location Access
+    //MARK: - Location Access
     func haveAccessToUserLocation() -> Bool {
         if appDelegate.locationManager != nil {
             return true
@@ -727,7 +750,7 @@ class ChatPageVC: JSQMessagesViewController {
         return currentDateFormat.string(from: date!)
     }
     
-    //MARK: remove bad messages
+    //MARK: - remove bad messages
     func removeBadMessages(allMessages: [NSDictionary]) -> [NSDictionary] {
         var tempMsgs = allMessages
         for message in tempMsgs {
@@ -743,7 +766,7 @@ class ChatPageVC: JSQMessagesViewController {
         return tempMsgs
     }
     
-    //MARK: Remove Listeners
+    //MARK: - Remove Listeners
     func removeListeners() {
         if typingListener != nil {
             typingListener?.remove()
@@ -756,7 +779,7 @@ class ChatPageVC: JSQMessagesViewController {
         }
     }
     
-    //MARK: Get Current Group
+    //MARK: - Get Current Group
     func getCurrentGroup(withId: String) {
         reference(.Group).document(withId).getDocument { (snapshot, error) in
             guard let snapshot = snapshot else { return }
@@ -767,7 +790,7 @@ class ChatPageVC: JSQMessagesViewController {
         }
     }
     
-    //MARK: custom send button
+    //MARK: - custom send button
     func updateSendButton(isSend: Bool) {
         if isSend {
             self.inputToolbar.contentView.rightBarButtonItem.setImage(UIImage(named: "send"), for: .normal)
@@ -776,7 +799,7 @@ class ChatPageVC: JSQMessagesViewController {
         }
     }
     
-    //MARK: IBActions navigation back from chat page VC
+    //MARK: - IBActions navigation back from chat page VC
     @objc func backAction() {
         clearRecentCounter(chatRoomId: chatRoomId)
         removeListeners()
@@ -807,7 +830,7 @@ class ChatPageVC: JSQMessagesViewController {
         self.navigationController?.pushViewController(profileVC, animated: true)
     }
     
-    //MARK: Typing Observer
+    //MARK: - Typing Observer
     func createTypingObserver() {
         //notify the other user if current is typing
         typingListener = reference(.Typing).document(chatRoomId).addSnapshotListener({ (snapshot, error) in
@@ -852,7 +875,7 @@ class ChatPageVC: JSQMessagesViewController {
 }
 
 
-//MARK: Fix UI issue for iphone x
+//MARK: - Fix UI issue for iphone x
 extension JSQMessagesInputToolbar {
     override open func didMoveToWindow() {
         super.didMoveToWindow()
@@ -864,7 +887,7 @@ extension JSQMessagesInputToolbar {
     }
 }
 
-//MARK: UIImagePickerController delegate methods
+//MARK: - UIImagePickerController delegate methods
 extension ChatPageVC: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let video = info[UIImagePickerController.InfoKey.mediaURL] as? NSURL
@@ -874,7 +897,7 @@ extension ChatPageVC: UIImagePickerControllerDelegate, UINavigationControllerDel
     }
 }
 
-//MARK: Record Audio message
+//MARK: - Record Audio message
 extension ChatPageVC : IQAudioRecorderViewControllerDelegate {
     
     func audioRecorderController(_ controller: IQAudioRecorderViewController, didFinishWithAudioAtPath filePath: String) {
