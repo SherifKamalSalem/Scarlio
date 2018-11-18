@@ -8,6 +8,7 @@
 
 import UIKit
 import ProgressHUD
+import ImagePicker
 
 class EditProfileTableVC: UITableViewController {
     
@@ -58,7 +59,10 @@ class EditProfileTableVC: UITableViewController {
     
     
     @IBAction func avatarImgTapped(_ sender: Any) {
-        
+        let imagePickerController = ImagePickerController()
+        imagePickerController.delegate = self
+        imagePickerController.imageLimit = 1
+        present(imagePickerController, animated: true, completion: nil)
     }
     
     @IBAction func saveBtnPressed(_ sender: Any) {
@@ -69,7 +73,7 @@ class EditProfileTableVC: UITableViewController {
             let fullName = firstNameTxtField.text! + " " + lastNameTxtField!.text!
             var withValues = [kFIRSTNAME : firstNameTxtField.text!, kLASTNAME : lastNameTxtField.text!, kFULLNAME : fullName]
             if avatarImage != nil {
-                let avatarData = avatarImage?.jpegData(compressionQuality: 0.7)
+                let avatarData = avatarImage?.jpegData(compressionQuality: 0.4)
                 let avatarString = avatarData?.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
                 withValues[kAVATAR] = avatarString
             }
@@ -89,5 +93,24 @@ class EditProfileTableVC: UITableViewController {
         } else {
             ProgressHUD.showError("All Fields are Required")
         }
+    }
+}
+
+extension EditProfileTableVC : ImagePickerDelegate {
+    
+    func wrapperDidPress(_ imagePicker: ImagePickerController, images: [UIImage]) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [UIImage]) {
+        if images.count > 0 {
+            self.avatarImage = images.first!
+            self.userProfileImg.image = self.avatarImage!.circleMasked
+        }
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func cancelButtonDidPress(_ imagePicker: ImagePickerController) {
+        self.dismiss(animated: true, completion: nil)
     }
 }

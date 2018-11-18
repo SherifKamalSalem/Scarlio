@@ -8,6 +8,7 @@
 
 import UIKit
 import ProgressHUD
+import ImagePicker
 
 class NewGroupVC: UIViewController {
 
@@ -53,11 +54,11 @@ class NewGroupVC: UIViewController {
     @objc func createBtnPressed(_ sender: Any) {
         if subjectTxtField.text != nil {
             memberIds.append(FUser.currentId())
-            let avatarData = UIImage(named: "groupIcon")?.jpegData(compressionQuality: 0.7)
+            let avatarData = UIImage(named: "groupIcon")?.jpegData(compressionQuality: 0.4)
             var avatar = avatarData?.base64EncodedString(options: Data.Base64EncodingOptions(rawValue: 0))
             if groupIcon != nil {
                 let avatarData = groupIcon!.jpegData(compressionQuality: 0.7)
-                let avatar = avatarData!.base64EncodedString(options: Data.Base64EncodingOptions(rawValue: 0))
+                avatar! = avatarData!.base64EncodedString(options: Data.Base64EncodingOptions(rawValue: 0))
             }
             let groupId = UUID().uuidString
             let group = Group(groupId: groupId, subject: subjectTxtField.text!, ownerId: FUser.currentId(), members: memberIds, avatar: avatar!)
@@ -90,7 +91,10 @@ class NewGroupVC: UIViewController {
     func showIconOptions() {
         let optionMenu = UIAlertController(title: "Choose Group Icon", message: nil, preferredStyle: .actionSheet)
         let takePhotoAction = UIAlertAction(title: "Take/Choose Photo", style: .default) { (action) in
-            
+            let imagePickerController = ImagePickerController()
+            imagePickerController.delegate = self
+            imagePickerController.imageLimit = 1
+            self.present(imagePickerController, animated: true, completion: nil)
         }
         if groupIcon != nil {
             let resetAction = UIAlertAction(title: "Reset", style: .default) { (action) in
@@ -138,5 +142,25 @@ extension NewGroupVC : GroupMemberCVCellDelegate {
         allMembers.remove(at: indexPath.row)
         memberIds.remove(at: indexPath.row)
         collectionView.reloadData()
+    }
+}
+
+extension NewGroupVC : ImagePickerDelegate {
+    
+    func wrapperDidPress(_ imagePicker: ImagePickerController, images: [UIImage]) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [UIImage]) {
+        if images.count > 0 {
+            self.groupIcon = images.first!
+            self.groupIconImg.image = self.groupIcon!.circleMasked
+            self.editBtn.isHidden = false
+        }
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func cancelButtonDidPress(_ imagePicker: ImagePickerController) {
+        self.dismiss(animated: true, completion: nil)
     }
 }

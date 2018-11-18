@@ -122,10 +122,9 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zc7-ih-IT3">
-                                        <rect key="frame" x="317" y="22.5" width="50" height="30"/>
+                                        <rect key="frame" x="330" y="22.5" width="37" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="4j8-aa-Mgk"/>
-                                            <constraint firstAttribute="width" constant="50" id="Ktx-F5-UOo"/>
                                         </constraints>
                                         <state key="normal" title="Done"/>
                                         <connections>
@@ -143,7 +142,7 @@
                                         <rect key="frame" x="8" y="22.5" width="50" height="30"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="30" id="UCZ-LU-yIS"/>
-                                            <constraint firstAttribute="width" constant="50" id="Y9I-Qe-1q8"/>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="50" id="Y9I-Qe-1q8"/>
                                         </constraints>
                                         <state key="normal" title="Cancel"/>
                                         <connections>
@@ -161,16 +160,22 @@
                                     <constraint firstItem="tJs-ZL-HPy" firstAttribute="centerY" secondItem="UlV-H0-Kzp" secondAttribute="centerY" id="XTG-7Q-EwT"/>
                                     <constraint firstAttribute="trailingMargin" secondItem="Zc7-ih-IT3" secondAttribute="trailing" id="Y3O-vj-fWm"/>
                                     <constraint firstAttribute="height" constant="75" id="b6L-rc-9vX"/>
+                                    <constraint firstItem="Zc7-ih-IT3" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="tJs-ZL-HPy" secondAttribute="trailing" constant="8" symbolic="YES" id="c3o-ab-8Jq"/>
                                     <constraint firstAttribute="bottom" secondItem="s3h-vF-9cC" secondAttribute="bottom" constant="1" id="ctR-Qn-lSA"/>
+                                    <constraint firstItem="tJs-ZL-HPy" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="5bz-FO-Ugz" secondAttribute="trailing" constant="8" symbolic="YES" id="fEH-J3-lCO"/>
                                     <constraint firstAttribute="trailing" secondItem="s3h-vF-9cC" secondAttribute="trailing" id="sHs-8x-YMS"/>
                                 </constraints>
                             </view>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="avatarPlaceholder" translatesAutoresizingMaskIntoConstraints="NO" id="1aI-5Q-rie">
                                 <rect key="frame" x="137.5" y="103" width="100" height="100"/>
+                                <gestureRecognizers/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="100" id="Dx7-6A-8XU"/>
                                     <constraint firstAttribute="height" constant="100" id="MoV-7A-G2v"/>
                                 </constraints>
+                                <connections>
+                                    <outletCollection property="gestureRecognizers" destination="5xS-8h-BcN" appends="YES" id="xhu-6F-94k"/>
+                                </connections>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="9" translatesAutoresizingMaskIntoConstraints="NO" id="zfo-4R-Hfb">
                                 <rect key="frame" x="16" y="219" width="343" height="186"/>
@@ -223,6 +228,7 @@
                     </view>
                     <connections>
                         <outlet property="avatarImg" destination="1aI-5Q-rie" id="SNi-IE-iu6"/>
+                        <outlet property="avatarTapGesture" destination="5xS-8h-BcN" id="Caf-lY-aO0"/>
                         <outlet property="cityTxtField" destination="KZK-Vi-4E4" id="Tmn-QK-Hly"/>
                         <outlet property="countryTxtField" destination="zUX-NS-OMf" id="5M5-mR-WYn"/>
                         <outlet property="nameTxtField" destination="7aW-EH-bSb" id="LMK-5R-Uiy"/>
@@ -231,6 +237,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SdN-C2-stg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="5xS-8h-BcN">
+                    <connections>
+                        <action selector="avatarImgTapped:" destination="VfF-w8-REs" id="aWB-uO-1No"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="703.20000000000005" y="25.637181409295355"/>
         </scene>

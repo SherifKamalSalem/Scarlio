@@ -8,6 +8,7 @@
 
 import UIKit
 import ProgressHUD
+import ImagePicker
 
 class EditGroupVC: UIViewController {
 
@@ -54,7 +55,10 @@ class EditGroupVC: UIViewController {
     func showIconOptions() {
         let optionMenu = UIAlertController(title: "Choose Group Icon", message: nil, preferredStyle: .actionSheet)
         let takePhotoAction = UIAlertAction(title: "Take/Choose Photo", style: .default) { (action) in
-            
+            let imagePickerController = ImagePickerController()
+            imagePickerController.delegate = self
+            imagePickerController.imageLimit = 1
+            self.present(imagePickerController, animated: true, completion: nil)
         }
         if groupIcon != nil {
             let resetAction = UIAlertAction(title: "Reset", style: .default) { (action) in
@@ -100,7 +104,7 @@ class EditGroupVC: UIViewController {
         } else {
             ProgressHUD.showError("Subject is Required!")
         }
-        let avatarData = cameraImageView.image?.jpegData(compressionQuality: 0.7)
+        let avatarData = cameraImageView.image?.jpegData(compressionQuality: 0.4)
         let avatarSring = avatarData?.base64EncodedString(options: Data.Base64EncodingOptions(rawValue: 0))
         withValues = [kNAME : groupSubjectTxtField.text!, kAVATAR : avatarSring!]
         Group.updateGroup(groupId: group![kGROUPID] as! String, withValues: withValues)
@@ -115,4 +119,23 @@ class EditGroupVC: UIViewController {
         self.navigationController?.pushViewController(userVC, animated: true)
     }
     
+}
+
+extension EditGroupVC : ImagePickerDelegate {
+    func wrapperDidPress(_ imagePicker: ImagePickerController, images: [UIImage]) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func doneButtonDidPress(_ imagePicker: ImagePickerController, images: [UIImage]) {
+        if images.count > 0 {
+            self.groupIcon = images.first!
+            self.cameraImageView.image = self.groupIcon!.circleMasked
+            self.editBtn.isHidden = false
+        }
+        self.dismiss(animated: true, completion: nil)
+    }
+    
+    func cancelButtonDidPress(_ imagePicker: ImagePickerController) {
+        self.dismiss(animated: true, completion: nil)
+    }
 }
