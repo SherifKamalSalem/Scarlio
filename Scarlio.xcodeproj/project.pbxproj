@@ -31,6 +31,8 @@
 		425B778F219E374F00D5C025 /* AudioMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425B778E219E374F00D5C025 /* AudioMessage.swift */; };
 		425B7791219E5A0A00D5C025 /* MapVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 425B7790219E5A0A00D5C025 /* MapVC.swift */; };
 		426DCA242192CB2A00F0742C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 426DCA232192CB2A00F0742C /* GoogleService-Info.plist */; };
+		4282125321A1350F009B354C /* EditGroupVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4282125221A1350F009B354C /* EditGroupVC.swift */; };
+		4282125521A13AE8009B354C /* InviteUsersTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4282125421A13AE8009B354C /* InviteUsersTableVC.swift */; };
 		42839A5F219633870013B8BA /* FinishRegisterationVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42839A5E219633870013B8BA /* FinishRegisterationVC.swift */; };
 		4287E6B5219CDAA9002F64B1 /* Camera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4287E6B4219CDAA9002F64B1 /* Camera.swift */; };
 		4287E6B7219CE982002F64B1 /* Download.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4287E6B6219CE982002F64B1 /* Download.swift */; };
@@ -76,6 +78,8 @@
 		425B778E219E374F00D5C025 /* AudioMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioMessage.swift; sourceTree = "<group>"; };
 		425B7790219E5A0A00D5C025 /* MapVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapVC.swift; sourceTree = "<group>"; };
 		426DCA232192CB2A00F0742C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		4282125221A1350F009B354C /* EditGroupVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGroupVC.swift; sourceTree = "<group>"; };
+		4282125421A13AE8009B354C /* InviteUsersTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = InviteUsersTableVC.swift; path = Profile/InviteUsersTableVC.swift; sourceTree = "<group>"; };
 		42839A5E219633870013B8BA /* FinishRegisterationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishRegisterationVC.swift; sourceTree = "<group>"; };
 		4287E6B4219CDAA9002F64B1 /* Camera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Camera.swift; sourceTree = "<group>"; };
 		4287E6B6219CE982002F64B1 /* Download.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Download.swift; sourceTree = "<group>"; };
@@ -126,6 +130,8 @@
 				4223535F219FC66F00966382 /* Auth */,
 				42235360219FC6ED00966382 /* ContactsTableVC.swift */,
 				42578E0A21A0BDFD004A6C83 /* NewGroupVC.swift */,
+				4282125221A1350F009B354C /* EditGroupVC.swift */,
+				4282125421A13AE8009B354C /* InviteUsersTableVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -423,6 +429,7 @@
 				42DFE01B21936013004FF74E /* HelperFunctions.swift in Sources */,
 				42BE22C12198F74A0075E481 /* UserTableViewCell.swift in Sources */,
 				42839A5F219633870013B8BA /* FinishRegisterationVC.swift in Sources */,
+				4282125321A1350F009B354C /* EditGroupVC.swift in Sources */,
 				42235356219FA4CB00966382 /* TermsVC.swift in Sources */,
 				42BE22C321990A4D0075E481 /* UserTableVC.swift in Sources */,
 				42578E0921A0BB31004A6C83 /* GroupMemberCVCell.swift in Sources */,
@@ -430,6 +437,7 @@
 				42235363219FD32700966382 /* CountryCode.swift in Sources */,
 				42B596CD2193291000435D73 /* Constants.swift in Sources */,
 				4287E6B7219CE982002F64B1 /* Download.swift in Sources */,
+				4282125521A13AE8009B354C /* InviteUsersTableVC.swift in Sources */,
 				42B596CF21932C4F00435D73 /* FCollectionReference.swift in Sources */,
 				425678CE219E8E64007B7A16 /* PictureCollectionVC.swift in Sources */,
 				42582F992192B03A00F494CB /* WelcomeVC.swift in Sources */,

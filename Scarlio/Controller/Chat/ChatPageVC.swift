@@ -101,6 +101,11 @@ class ChatPageVC: JSQMessagesViewController {
         JSQMessagesCollectionViewCell.registerMenuAction(#selector(delete))
         navigationItem.largeTitleDisplayMode = .never
         self.navigationItem.leftBarButtonItems = [UIBarButtonItem(image: UIImage(named: "Back"), style: .plain, target: self, action: #selector(self.backAction))]
+        //get current group
+        if isGroup! {
+            getCurrentGroup(withId: chatRoomId)
+            print("..............title\(titleName)")
+        }
         
         collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize.zero
         collectionView.collectionViewLayout.incomingAvatarViewSize = CGSize.zero
@@ -627,6 +632,18 @@ class ChatPageVC: JSQMessagesViewController {
         avatarButton.addTarget(self, action: #selector(self.showUserProfile), for: .touchUpInside)
     }
     
+    //MARK: - set UI for Group chat
+    func setUIForGroupChat() {
+        imageFromData(pictureData: group![kAVATAR] as! String) { (image) in
+            if image != nil {
+                avatarButton.setImage(image!.circleMasked, for: .normal)
+            }
+        }
+        titleLabel.text = titleName
+        print("..............title\(titleName)")
+        subtitleLabel.text = ""
+    }
+    
     //MARK: check if incoming or outgoing
     func isIncoming(messageDictionary: NSDictionary) -> Bool {
         if FUser.currentId() == messageDictionary[kSENDERID] as! String {
@@ -739,6 +756,17 @@ class ChatPageVC: JSQMessagesViewController {
         }
     }
     
+    //MARK: Get Current Group
+    func getCurrentGroup(withId: String) {
+        reference(.Group).document(withId).getDocument { (snapshot, error) in
+            guard let snapshot = snapshot else { return }
+            if snapshot.exists {
+                self.group = snapshot.data() as! NSDictionary
+                self.setUIForGroupChat()
+            }
+        }
+    }
+    
     //MARK: custom send button
     func updateSendButton(isSend: Bool) {
         if isSend {
@@ -762,7 +790,9 @@ class ChatPageVC: JSQMessagesViewController {
     }
     
     @objc func showGroup() {
-        
+        let groupVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "editGroupVC") as! EditGroupVC
+        groupVC.group = group
+        self.navigationController?.pushViewController(groupVC, animated: true)
     }
     
     @objc func showUserProfile() {

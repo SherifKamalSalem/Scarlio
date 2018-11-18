@@ -190,7 +190,10 @@ extension ChatsVC : UITableViewDelegate, UITableViewDataSource {
         
         let chatPageVC = ChatPageVC()
         chatPageVC.hidesBottomBarWhenPushed = true
-        chatPageVC.titleName = recent[kWITHUSERUSERNAME] as? String
+        chatPageVC.titleName = recent[kWITHUSERFULLNAME] as? String
+        print("........full name\(recent[kWITHUSERFULLNAME])")
+        print("........full name\(recent[kWITHUSERUSERNAME])]")
+        
         chatPageVC.memberIds = recent[kMEMBERS] as? [String]
         chatPageVC.membersToPush = recent[kMEMBERSTOPUSH] as? [String]
         chatPageVC.chatRoomId = recent[kCHATROOMID] as? String

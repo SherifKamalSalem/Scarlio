@@ -8,6 +8,8 @@
 
 import Foundation
 
+var groupName: String?
+
 func startPrivateChat(firstUser: FUser, secondUser: FUser) -> String {
     let firstUserId = firstUser.objectId
     let secondUserId = secondUser.objectId
@@ -83,12 +85,13 @@ func createRecentItem(userId: String, chatRoomId: String, members: [String], wit
                   kAVATAR : recentChatUser?.avatar] as [String : Any]
     } else {
         if avatarOfGroup != nil {
+            
             recent = [kRECENTID : recentId,
                       kUSERID : userId,
                       kCHATROOMID : chatRoomId,
                       kMEMBERS : members,
                       kMEMBERSTOPUSH : members,
-                      kWITHUSERFULLNAME : recentChatUser?.fullname ?? "User",
+                      kWITHUSERFULLNAME : groupName,
                       kLASTMESSAGE : "",
                       kCOUNTER : 0,
                       kDATE : date,
@@ -107,8 +110,7 @@ func restartChat(recent: NSDictionary) {
         createRecent(forMembers: recent[kMEMBERSTOPUSH] as! [String], chatRoomId: recent[kCHATROOMID] as! String, withUser: (FUser.currentUser()?.firstname)!, ofType: kPRIVATE, forUsers: [FUser.currentUser()!], avatarOfGroup: nil)
     }
     if recent[kTYPE] as! String == kGROUP {
-        print(".............\(recent[kNAME])")
-        createRecent(forMembers: recent[kMEMBERSTOPUSH] as! [String], chatRoomId: recent[kCHATROOMID] as! String, withUser: recent[kWITHUSERFULLNAME] as! String, ofType: kGROUP, forUsers: nil, avatarOfGroup: recent[kAVATAR] as? String)
+        createRecent(forMembers: recent[kMEMBERSTOPUSH] as! [String], chatRoomId: recent[kCHATROOMID] as! String, withUser: groupName ?? "" , ofType: kGROUP, forUsers: nil, avatarOfGroup: recent[kAVATAR] as? String)
     }
 }
 
@@ -215,5 +217,10 @@ func deleteRecentsFor(chatRoomId: String) {
 func startGroupChat(group: Group) {
     let chatRoomId = group.groupDictionary[kGROUPID] as! String
     let members = group.groupDictionary[kMEMBERS] as! [String]
+    groupName = group.groupDictionary[kNAME] as! String
     createRecent(forMembers: members, chatRoomId: chatRoomId, withUser: group.groupDictionary[kNAME] as! String, ofType: kGROUP, forUsers: nil, avatarOfGroup: group.groupDictionary[kAVATAR] as? String)
+}
+
+func createRecent(forNewMembers membersToPush: [String], groupId: String, groupName: String, avatar: String) {
+    createRecent(forMembers: membersToPush, chatRoomId: groupId, withUser: groupName, ofType: kGROUP, forUsers: nil, avatarOfGroup: avatar)
 }
