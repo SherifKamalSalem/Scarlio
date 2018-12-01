@@ -8,3 +8,6 @@ an iOS real time chat app based on Firestore (the new google technology) includi
 - Cached photos and videos to decrease network access and save time.
 - Custom Views
 - MVC design pattern
+- Choose your chatmate from your contacts
+- Mute, delete or block another chatmate
+- Change chat page background
