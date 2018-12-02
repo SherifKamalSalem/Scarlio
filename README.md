@@ -14,4 +14,5 @@ an iOS real time chat app based on Firestore (the new google technology) includi
 
 
 ## Screenshots
-| (https://github.com/SherifKamalSalem/Scarlio/blob/master/collection.png) |
+| ![photos](https://github.com/SherifKamalSalem/Scarlio/blob/master/collection.png) | 
+|:---:|:---:|
