@@ -13,6 +13,7 @@ an iOS real time chat app based on Firestore (the new google technology) includi
 - Mute, delete or block another chatmate
 - Change chat page background
 - Clear cached data (audio, video, photos)
+- Using UserDefaults to support automatic login
 
 
 ## Screenshots
