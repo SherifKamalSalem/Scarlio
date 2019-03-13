@@ -328,8 +328,12 @@ class ChatPageVC: JSQMessagesViewController {
     
     override func textViewDidChange(_ textView: UITextView) {
         if textView.text != "" {
+            
+            self.inputToolbar.contentView.rightBarButtonItem.isEnabled = true
             updateSendButton(isSend: true)
         } else {
+            
+            self.inputToolbar.contentView.rightBarButtonItem.isEnabled = false
             updateSendButton(isSend: false)
         }
     }
