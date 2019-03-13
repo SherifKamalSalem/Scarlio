@@ -30,13 +30,14 @@ class ChatsVC: UIViewController {
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
+        
+        setTableViewHeader()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         loadRecentChats()
         tableView.tableFooterView = UIView()
-        setTableViewHeader()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -80,7 +81,7 @@ class ChatsVC: UIViewController {
         groupButton.backgroundColor = #colorLiteral(red: 0, green: 0.4784313725, blue: 1, alpha: 1)
         groupButton.layer.cornerRadius = 7
         groupButton.addTarget(self, action: #selector(groupButtonPressed), for: .touchUpInside)
-        let lineView = UIView(frame: CGRect(x: 0, y: headerView.frame.height - 1, width: tableView.frame.width, height: 1))
+        let lineView = UIView(frame: CGRect(x: 0, y: headerView.frame.height - 1, width: tableView.frame.width+80, height: 1))
         lineView.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
         buttonView.addSubview(groupButton)
         headerView.addSubview(buttonView)
